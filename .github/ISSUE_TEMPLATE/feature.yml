@@ -1,0 +1,68 @@
+name: Feature / Task
+description: A new feature, implementation task, or technical work item
+title: "[CATEGORY] Brief title"
+labels: []
+body:
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How urgent is this?
+      options:
+        - "P0 — Blocker (nothing else can start without this)"
+        - "P1 — High (core path, needed for MVP)"
+        - "P2 — Medium (important but not blocking MVP)"
+        - "P3 — Low (polish, nice-to-have)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - devops
+        - frontend
+        - inference
+        - testing
+        - design
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What needs to be done? Include acceptance criteria and key implementation notes.
+      placeholder: |
+        ## What
+        ...
+
+        ## Acceptance Criteria
+        - [ ] ...
+
+        ## Implementation Notes
+        ...
+    validations:
+      required: true
+
+  - type: input
+    id: blocked_by
+    attributes:
+      label: Blocked by
+      description: Issue numbers this task depends on (e.g. #1, #4)
+      placeholder: "#1, #4"
+
+  - type: dropdown
+    id: performing_agent
+    attributes:
+      label: Performing Agent
+      description: Which agent / role should implement this?
+      options:
+        - frontend-engineer
+        - devops-engineer
+        - inference-engineer
+        - system-architect
+        - any
+    validations:
+      required: true

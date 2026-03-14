@@ -1,0 +1,65 @@
+name: Bug Report
+description: Something is broken or behaving unexpectedly
+title: "[BUG] Brief title"
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - "P0 — Blocker"
+        - "P1 — High"
+        - "P2 — Medium"
+        - "P3 — Low"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - devops
+        - frontend
+        - inference
+        - testing
+        - design
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What is broken? Steps to reproduce, expected vs actual behavior.
+      placeholder: |
+        ## Steps to Reproduce
+        1. ...
+
+        ## Expected Behavior
+        ...
+
+        ## Actual Behavior
+        ...
+    validations:
+      required: true
+
+  - type: input
+    id: blocked_by
+    attributes:
+      label: Blocked by
+      placeholder: "#1, #4"
+
+  - type: dropdown
+    id: performing_agent
+    attributes:
+      label: Performing Agent
+      options:
+        - frontend-engineer
+        - devops-engineer
+        - inference-engineer
+        - system-architect
+        - any
+    validations:
+      required: true
