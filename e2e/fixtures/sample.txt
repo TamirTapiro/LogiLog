@@ -1,0 +1,20 @@
+2024-01-15T10:00:00.000Z INFO  app[1234]: Application started successfully
+2024-01-15T10:00:01.100Z DEBUG app[1234]: Loading configuration from /etc/app/config.json
+2024-01-15T10:00:02.200Z INFO  app[1234]: Database connection established
+2024-01-15T10:00:03.300Z WARN  app[1234]: Connection pool running low: 5 of 20 slots remaining
+2024-01-15T10:00:04.400Z ERROR app[1234]: Failed to process request: timeout after 30s
+2024-01-15T10:00:05.500Z INFO  app[1234]: Retrying failed request (attempt 1 of 3)
+2024-01-15T10:00:06.600Z INFO  app[1234]: Request succeeded on retry
+2024-01-15T10:00:07.700Z DEBUG app[1234]: Cache hit ratio: 87.3%
+2024-01-15T10:00:08.800Z WARN  app[1234]: Memory usage above threshold: 78%
+2024-01-15T10:00:09.900Z INFO  app[1234]: Scheduled maintenance task started
+2024-01-15T10:01:00.000Z INFO  app[1234]: Processing batch job: 1000 records
+2024-01-15T10:01:01.100Z DEBUG app[1234]: Batch progress: 100/1000
+2024-01-15T10:01:02.200Z DEBUG app[1234]: Batch progress: 200/1000
+2024-01-15T10:01:03.300Z ERROR app[1234]: Batch processing error: invalid data format at record 250
+2024-01-15T10:01:04.400Z WARN  app[1234]: Skipping malformed record, continuing batch
+2024-01-15T10:01:05.500Z DEBUG app[1234]: Batch progress: 300/1000
+2024-01-15T10:01:06.600Z INFO  app[1234]: Batch completed: 999 records processed, 1 skipped
+2024-01-15T10:02:00.000Z INFO  app[1234]: Health check: all systems nominal
+2024-01-15T10:02:01.100Z ERROR app[1234]: Unhandled exception in worker thread: NullPointerException
+2024-01-15T10:02:02.200Z FATAL app[1234]: Critical system failure detected, initiating shutdown
