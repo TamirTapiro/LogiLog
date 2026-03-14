@@ -64,7 +64,7 @@ export function useInferenceWorker() {
         const api = getOrCreateWorker()
         const embeddings = await api.embed(
           messages,
-          Comlink.proxy((_event: WorkerProgressEvent) => {
+          Comlink.proxy((_: WorkerProgressEvent) => {
             // progress update — could update store if needed
           }),
         )
