@@ -5,6 +5,9 @@ import type { ParseWorkerOutput } from './worker.types'
 const BATCH_SIZE = 500
 const SAMPLE_SIZE = 20
 
+// Alias consumed by useParseWorker hook
+export type ParseWorker = ParseWorkerAPI
+
 export interface ParseWorkerAPI {
   parseFile(
     file: File,
@@ -25,7 +28,6 @@ const worker: ParseWorkerAPI = {
     let id = 0
     let byteOffset = 0
     let parsedLines = 0
-    let totalLines = 0
     const batchEntries: ParseWorkerOutput['entries'] = []
 
     // --- Phase 1: collect first SAMPLE_SIZE lines for format detection ---
@@ -57,15 +59,6 @@ const worker: ParseWorkerAPI = {
     const decoder = new TextDecoder()
     let remainder = ''
 
-    const flushBatch = (done: boolean) => {
-      if (batchEntries && batchEntries.length > 0) {
-        onBatch({ type: 'batch', entries: [...batchEntries], totalParsed: parsedLines, done })
-        batchEntries.length = 0
-      } else if (done) {
-        onBatch({ type: 'done', totalParsed: parsedLines, done: true })
-      }
-    }
-
     while (true) {
       if (_cancelled) {
         reader.cancel()
@@ -85,7 +78,6 @@ const worker: ParseWorkerAPI = {
       for (const raw of lines) {
         if (_cancelled) { reader.cancel(); return }
         const lineBytes = new TextEncoder().encode(raw + '\n').byteLength
-        totalLines++
 
         if (!raw.trim()) {
           byteOffset += lineBytes

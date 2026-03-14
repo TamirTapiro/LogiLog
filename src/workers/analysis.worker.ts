@@ -209,6 +209,9 @@ function extractLabel(messages: string[]): string {
 
 // ---- Comlink-exposed worker ----
 
+// Alias consumed by useAnalysisWorker hook
+export type AnalysisWorker = AnalysisWorkerAPI
+
 export interface AnalysisWorkerAPI {
   scoreAnomalies(embeddings: Float32Array[], logIds: number[]): AnomalyResult[]
   cluster(embeddings: Float32Array[], logIds: number[], messages: string[]): ClusterResult[]

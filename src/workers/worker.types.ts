@@ -28,6 +28,7 @@ export interface ParseWorkerOutput {
   type: 'batch' | 'done' | 'error'
   entries?: WorkerLogEntry[]
   totalParsed?: number
+  done?: boolean
   error?: string
 }
 

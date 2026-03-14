@@ -4,8 +4,10 @@ import { IDBModelCache } from './inferenceWorker/idbCache'
 import type { CacheMeta } from './inferenceWorker/idbCache'
 
 // Transformers.js configuration
-env.backends.onnx.wasm.proxy = false
-env.backends.onnx.wasm.numThreads = 4
+if (env.backends?.onnx?.wasm) {
+  env.backends.onnx.wasm.proxy = false
+  env.backends.onnx.wasm.numThreads = 4
+}
 env.allowRemoteModels = true
 
 export type WorkerProgressEventType =
@@ -21,6 +23,9 @@ export interface WorkerProgressEvent {
   total?: number
   message?: string
 }
+
+// Alias consumed by useInferenceWorker hook
+export type InferenceWorker = InferenceWorkerAPI
 
 export interface InferenceWorkerAPI {
   initialize(
@@ -95,7 +100,8 @@ const inferenceWorker: InferenceWorkerAPI = {
 
       // Load with transformers.js (it handles download internally)
       // We hook into the progress callback for download reporting
-      _pipe = await pipeline('feature-extraction', _modelId, {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      _pipe = await (pipeline as any)('feature-extraction', _modelId, {
         dtype: _dtype as 'q4' | 'q8',
         device: _device as 'webgpu' | 'wasm',
         progress_callback: (info: unknown) => {

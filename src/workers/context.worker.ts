@@ -138,6 +138,9 @@ function buildNarrative(
   return narrative
 }
 
+// Alias consumed by useContextWorker hook
+export type ContextWorker = ContextWorkerAPI
+
 export interface ContextWorkerAPI {
   extractContext(
     anchorLogId: number,

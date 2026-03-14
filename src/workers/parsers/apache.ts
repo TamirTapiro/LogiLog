@@ -50,7 +50,7 @@ export const ApacheCombinedParser: LogParser = {
   parse(line): ParsedEntry | null {
     const m = COMBINED_RE.exec(line)
     if (!m) return null
-    const [, ip, user, dateStr, request, statusStr] = m
+    const [, ip, , dateStr, request, statusStr] = m
     const status = parseInt(statusStr ?? '200', 10)
     return {
       timestamp: parseApacheDate(dateStr ?? ''),
