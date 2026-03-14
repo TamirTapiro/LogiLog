@@ -1,0 +1,25 @@
+{
+  "ci": {
+    "collect": {
+      "staticDistDir": "./dist",
+      "numberOfRuns": 3
+    },
+    "assert": {
+      "assertions": {
+        "categories:performance": ["warn", { "minScore": 0.8 }],
+        "first-contentful-paint": [
+          "error",
+          { "maxNumericValue": 1500, "aggregationMethod": "optimistic" }
+        ],
+        "interactive": ["error", { "maxNumericValue": 3000, "aggregationMethod": "optimistic" }],
+        "total-byte-weight": [
+          "error",
+          { "maxNumericValue": 204800, "aggregationMethod": "optimistic" }
+        ]
+      }
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    }
+  }
+}
