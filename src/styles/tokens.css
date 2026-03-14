@@ -1,0 +1,58 @@
+:root {
+  /* Colors — backgrounds */
+  --color-bg-primary: #0d0d0d;
+  --color-bg-secondary: #161616;
+  --color-bg-tertiary: #1e1e1e;
+
+  /* Colors — borders */
+  --color-border: #2a2a2a;
+
+  /* Colors — text */
+  --color-text-primary: #e2e2e2;
+  --color-text-secondary: #888;
+  --color-text-muted: #555;
+
+  /* Colors — accents */
+  --color-accent-green: #00ff87;
+  --color-accent-amber: #ffb800;
+  --color-accent-red: #ff4444;
+  --color-accent-blue: #4d9eff;
+
+  /* Colors — log levels */
+  --color-level-error: #ff4444;
+  --color-level-warn: #ffb800;
+  --color-level-info: #00ff87;
+  --color-level-debug: #4d9eff;
+  --color-level-trace: #888;
+
+  /* Typography */
+  --font-mono: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', monospace;
+  --font-size-xs: 0.625rem;
+  --font-size-sm: 0.75rem;
+  --font-size-base: 0.875rem;
+  --font-size-lg: 1rem;
+  --font-size-xl: 1.125rem;
+  --line-height-log: 1.4;
+
+  /* Spacing — 4px base grid */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  /* Borders */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+
+  /* Animation */
+  --transition-fast: 80ms ease;
+  --transition-normal: 150ms ease;
+
+  /* Z-index */
+  --z-overlay: 100;
+  --z-modal: 200;
+  --z-tooltip: 300;
+}
