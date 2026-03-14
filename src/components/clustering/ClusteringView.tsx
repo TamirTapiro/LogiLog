@@ -1,6 +1,7 @@
 import useStore from '../../store'
 import type { ClusterResult } from '../../types/analysis.types'
 import { ClusterGroup } from './ClusterGroup'
+import { exportToJson, exportToCsv } from '../../lib/exportUtils'
 import styles from './ClusteringView.module.css'
 
 function SkeletonRow() {
@@ -25,6 +26,27 @@ export function ClusteringView() {
   const isLoading = analysisStatus === 'analyzing' || analysisStatus === 'embedding'
   const isDone = analysisStatus === 'done'
   const sorted = sortClusters(clusters)
+
+  const handleExportJson = async () => {
+    const data = sorted.map((c) => ({
+      clusterId: c.clusterId,
+      label: c.label,
+      size: c.size,
+      memberIds: c.memberIds,
+    }))
+    await exportToJson(data, 'clusters.json')
+  }
+
+  const handleExportCsv = async () => {
+    const headers = ['clusterId', 'label', 'size', 'memberCount']
+    const rows = sorted.map((c) => ({
+      clusterId: c.clusterId,
+      label: c.label,
+      size: c.size,
+      memberCount: c.memberIds.length,
+    }))
+    await exportToCsv(rows, headers, 'clusters.csv')
+  }
 
   if (isLoading) {
     return (
@@ -57,6 +79,22 @@ export function ClusteringView() {
 
   return (
     <div className={styles.container}>
+      <div className={styles.exportBar}>
+        <button
+          className={styles.exportBtn}
+          onClick={handleExportJson}
+          aria-label="Export clusters as JSON"
+        >
+          JSON
+        </button>
+        <button
+          className={styles.exportBtn}
+          onClick={handleExportCsv}
+          aria-label="Export clusters as CSV"
+        >
+          CSV
+        </button>
+      </div>
       <div className={styles.list}>
         {sorted.map((cluster) => (
           <ClusterGroup

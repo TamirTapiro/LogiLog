@@ -4,6 +4,7 @@ import useStore from '../../store'
 import type { AnomalyResult } from '../../types/analysis.types'
 import type { LogEntry } from '../../types/log.types'
 import { AnomalyCard } from './AnomalyCard'
+import { exportToJson, exportToCsv } from '../../lib/exportUtils'
 import styles from './AnomalyList.module.css'
 
 interface ItemData {
@@ -41,6 +42,39 @@ export function AnomalyList() {
   const itemData: ItemData = { anomalies: filtered, entries }
   const isLoading = analysisStatus === 'analyzing' || analysisStatus === 'embedding'
 
+  const handleExportJson = async () => {
+    const data = filtered.map((a) => {
+      const entry = entries.find((e) => e.id === a.logId)
+      return {
+        logId: a.logId,
+        score: a.score,
+        rank: a.rank,
+        timestamp: entry ? new Date(entry.timestamp).toISOString() : null,
+        level: entry?.level ?? null,
+        source: entry?.source ?? null,
+        message: entry?.message ?? null,
+      }
+    })
+    await exportToJson(data, 'anomalies.json')
+  }
+
+  const handleExportCsv = async () => {
+    const headers = ['logId', 'score', 'rank', 'timestamp', 'level', 'source', 'message']
+    const rows = filtered.map((a) => {
+      const entry = entries.find((e) => e.id === a.logId)
+      return {
+        logId: a.logId,
+        score: a.score.toFixed(4),
+        rank: a.rank,
+        timestamp: entry ? new Date(entry.timestamp).toISOString() : '',
+        level: entry?.level ?? '',
+        source: entry?.source ?? '',
+        message: entry?.message ?? '',
+      }
+    })
+    await exportToCsv(rows, headers, 'anomalies.csv')
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.controls}>
@@ -55,6 +89,22 @@ export function AnomalyList() {
           className={styles.slider}
         />
         <span className={styles.thresholdValue}>{threshold.toFixed(2)}</span>
+        <button
+          className={styles.exportBtn}
+          onClick={handleExportJson}
+          disabled={filtered.length === 0}
+          aria-label="Export anomalies as JSON"
+        >
+          JSON
+        </button>
+        <button
+          className={styles.exportBtn}
+          onClick={handleExportCsv}
+          disabled={filtered.length === 0}
+          aria-label="Export anomalies as CSV"
+        >
+          CSV
+        </button>
       </div>
 
       <div ref={containerRef} className={styles.listWrapper}>

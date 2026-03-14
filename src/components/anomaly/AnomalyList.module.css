@@ -36,6 +36,31 @@
   text-align: right;
 }
 
+.exportBtn {
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-secondary);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  padding: 2px var(--space-2);
+  cursor: pointer;
+  transition:
+    color var(--transition-normal),
+    border-color var(--transition-normal);
+  white-space: nowrap;
+}
+
+.exportBtn:hover:not(:disabled) {
+  color: var(--color-accent-green);
+  border-color: var(--color-accent-green);
+}
+
+.exportBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .listWrapper {
   flex: 1;
   min-height: 0;

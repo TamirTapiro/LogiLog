@@ -250,3 +250,31 @@
   border-color: var(--color-accent-green);
   background: rgba(0, 255, 135, 0.04);
 }
+
+.exportRow {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.exportBtn {
+  flex: 1;
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  padding: var(--space-2) var(--space-3);
+  cursor: pointer;
+  transition:
+    color var(--transition-normal),
+    border-color var(--transition-normal),
+    background var(--transition-normal);
+}
+
+.exportBtn:hover {
+  color: var(--color-accent-green);
+  border-color: var(--color-accent-green);
+  background: rgba(0, 255, 135, 0.04);
+}

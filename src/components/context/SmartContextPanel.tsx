@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react'
 import useStore from '../../store'
 import { Spinner } from '../shared/Spinner'
 import type { LogEntry } from '../../types/log.types'
+import { exportToJson, exportToCsv } from '../../lib/exportUtils'
 import styles from './SmartContextPanel.module.css'
 
 function buildGroups(
@@ -67,6 +68,42 @@ export function SmartContextPanel() {
     await navigator.clipboard.writeText(text)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+  }
+
+  const handleExportJson = async () => {
+    if (!context) return
+    const data = {
+      anchorLogId: context.anchorLogId,
+      narrative: context.narrative,
+      relatedLogIds: context.relatedLogIds,
+      precedingLines: context.precedingLines.map((l) => ({
+        id: l.id,
+        timestamp: new Date(l.timestamp).toISOString(),
+        level: l.level,
+        source: l.source,
+        message: l.message,
+      })),
+    }
+    await exportToJson(data, `context-${context.anchorLogId}.json`)
+  }
+
+  const handleExportCsv = async () => {
+    if (!context) return
+    const headers = ['id', 'timestamp', 'level', 'source', 'message', 'kind']
+    const rows = context.precedingLines.map((l) => ({
+      id: l.id,
+      timestamp: new Date(l.timestamp).toISOString(),
+      level: l.level,
+      source: l.source,
+      message: l.message,
+      kind:
+        l.id === context.anchorLogId
+          ? 'anchor'
+          : context.relatedLogIds.includes(l.id)
+            ? 'related'
+            : 'normal',
+    }))
+    await exportToCsv(rows, headers, `context-${context.anchorLogId}.csv`)
   }
 
   const formatTimestamp = (ts: number) => new Date(ts).toISOString()
@@ -198,6 +235,22 @@ export function SmartContextPanel() {
               <button className={styles.copyBtn} onClick={handleCopy}>
                 {copied ? '✓ Copied' : 'Copy to clipboard'}
               </button>
+              <div className={styles.exportRow}>
+                <button
+                  className={styles.exportBtn}
+                  onClick={handleExportJson}
+                  aria-label="Export smart context as JSON"
+                >
+                  Export JSON
+                </button>
+                <button
+                  className={styles.exportBtn}
+                  onClick={handleExportCsv}
+                  aria-label="Export smart context as CSV"
+                >
+                  Export CSV
+                </button>
+              </div>
             </div>
           </>
         )}
