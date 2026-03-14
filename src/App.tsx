@@ -1,43 +1,7 @@
-import { Component, ErrorInfo, ReactNode } from 'react'
 import { AppShell } from './components/layout/AppShell'
+import { ErrorBoundary } from './components/shared/ErrorBoundary'
 import useStore from './store'
 import type { ActivePanel } from './types/store.types'
-
-interface ErrorBoundaryProps {
-  children: ReactNode
-}
-
-interface ErrorBoundaryState {
-  hasError: boolean
-  error: Error | null
-}
-
-class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  constructor(props: ErrorBoundaryProps) {
-    super(props)
-    this.state = { hasError: false, error: null }
-  }
-
-  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
-    return { hasError: true, error }
-  }
-
-  componentDidCatch(error: Error, info: ErrorInfo): void {
-    console.error('[LogiLog] Uncaught error:', error, info)
-  }
-
-  render(): ReactNode {
-    if (this.state.hasError) {
-      return (
-        <div role="alert" style={{ padding: '2rem', fontFamily: 'monospace' }}>
-          <h1>Something went wrong</h1>
-          <pre>{this.state.error?.message}</pre>
-        </div>
-      )
-    }
-    return this.props.children
-  }
-}
 
 const PANEL_LABELS: Record<ActivePanel, string> = {
   timeline: 'Timeline',
@@ -67,8 +31,42 @@ function PanelContent() {
 }
 
 function App() {
+  const ingestionStatus = useStore((s) => s.ingestion.status)
+  const ingestionError = useStore((s) => s.ingestion.error)
+  const ingestionProgress = useStore((s) => s.ingestion.progress)
+  const analysisStatus = useStore((s) => s.analysis.analysisStatus)
+
+  let statusMessage = ''
+  if (ingestionStatus === 'error') {
+    statusMessage = `Error: ${ingestionError ?? 'Unknown error'}`
+  } else if (ingestionStatus === 'loading') {
+    statusMessage = 'Opening file'
+  } else if (ingestionStatus === 'parsing') {
+    statusMessage = `Parsing log file: ${Math.round(ingestionProgress * 100)}%`
+  } else if (analysisStatus === 'embedding') {
+    statusMessage = 'Loading analysis model'
+  } else if (analysisStatus === 'analyzing') {
+    statusMessage = `Analyzing: ${Math.round(ingestionProgress * 100)}%`
+  } else if (ingestionStatus === 'done' && analysisStatus === 'done') {
+    statusMessage = 'Analysis complete'
+  }
+
   return (
     <ErrorBoundary>
+      <div
+        aria-live="polite"
+        aria-atomic="true"
+        style={{
+          position: 'absolute',
+          width: 1,
+          height: 1,
+          overflow: 'hidden',
+          clip: 'rect(0,0,0,0)',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        {statusMessage}
+      </div>
       <AppShell>
         <PanelContent />
       </AppShell>
