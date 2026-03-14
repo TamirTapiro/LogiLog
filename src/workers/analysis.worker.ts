@@ -220,3 +220,4 @@ const analysisWorker: AnalysisWorkerAPI = {
 }
 
 Comlink.expose(analysisWorker)
+# clustering: mini-batch k-means with auto-tuned k and 3-gram labels
