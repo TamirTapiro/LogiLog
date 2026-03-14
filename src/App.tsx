@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { AppShell } from './components/layout/AppShell'
 import { ErrorBoundary } from './components/shared/ErrorBoundary'
 import { KeyboardShortcutsModal } from './components/shared/KeyboardShortcutsModal'
@@ -38,6 +39,15 @@ function App() {
   const ingestionError = useStore((s) => s.ingestion.error)
   const ingestionProgress = useStore((s) => s.ingestion.progress)
   const analysisStatus = useStore((s) => s.analysis.analysisStatus)
+  const fileName = useStore((s) => s.ingestion.fileName)
+
+  useEffect(() => {
+    if (fileName) {
+      document.title = `${fileName} — LogiLog`
+    } else {
+      document.title = 'LogiLog'
+    }
+  }, [fileName])
 
   let statusMessage = ''
   if (ingestionStatus === 'error') {

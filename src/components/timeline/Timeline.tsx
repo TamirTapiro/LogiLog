@@ -23,7 +23,7 @@ export function Timeline() {
 
   return (
     <div className={styles.container} ref={containerRef}>
-      <div className={styles.chartWrapper}>
+      <div className={styles.chartWrapper} aria-label="Log timeline chart" role="img">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={chartData}

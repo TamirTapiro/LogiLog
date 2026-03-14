@@ -41,6 +41,7 @@ export function LogSearch() {
         className={`${styles.toggle} ${regexMode ? styles.active : ''}`}
         onClick={() => setRegexMode((v) => !v)}
         title="Toggle regex mode"
+        aria-label="Toggle regex mode"
         aria-pressed={regexMode}
       >
         /.*/
@@ -49,6 +50,7 @@ export function LogSearch() {
         className={`${styles.toggle} ${filterMode === 'filter' ? styles.active : ''}`}
         onClick={() => setFilterMode((v) => (v === 'filter' ? 'highlight' : 'filter'))}
         title="Toggle filter vs highlight"
+        aria-label={filterMode === 'filter' ? 'Switch to highlight mode' : 'Switch to filter mode'}
         aria-pressed={filterMode === 'filter'}
       >
         {filterMode === 'filter' ? 'Filter' : 'Highlight'}

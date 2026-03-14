@@ -55,4 +55,24 @@
   --z-overlay: 100;
   --z-modal: 200;
   --z-tooltip: 300;
+
+  /* Focus */
+  --focus-ring: 0 0 0 2px var(--color-accent-green);
+}
+
+/* WCAG 2.1 AA — visible focus indicators for keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--color-accent-green);
+  outline-offset: 2px;
+}
+
+button:focus-visible,
+[role='button']:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--color-accent-green);
+  outline-offset: 2px;
+  box-shadow: var(--focus-ring);
 }

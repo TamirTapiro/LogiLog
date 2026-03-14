@@ -51,10 +51,18 @@ export function AnomalyCard({ index, style, data }: ListChildComponentProps<Item
           <span className={styles.timestamp}>{formatTimestamp(entry.timestamp)}</span>
         </div>
         <div className={styles.actions}>
-          <button className={styles.btn} onClick={handleViewContext}>
+          <button
+            className={styles.btn}
+            onClick={handleViewContext}
+            aria-label={`View context for anomaly #${anomaly.rank}`}
+          >
             View Context
           </button>
-          <button className={styles.btn} onClick={handleJump}>
+          <button
+            className={styles.btn}
+            onClick={handleJump}
+            aria-label={`Jump to log entry for anomaly #${anomaly.rank}`}
+          >
             Jump to Log
           </button>
         </div>

@@ -51,14 +51,19 @@ export function ClusterGroup({ cluster, allEntries, anomalyIds, totalEntries }: 
 
   return (
     <div className={styles.group}>
-      <div className={styles.header} onClick={() => setOpen((o) => !o)}>
+      <button
+        className={styles.header}
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        aria-label={`${displayLabel}, ${cluster.size} entries, ${pct}%${anomalyCount > 0 ? `, ${anomalyCount} anomalies` : ''}`}
+      >
         <span className={`${styles.chevron}${open ? ` ${styles.open}` : ''}`}>▶</span>
         <span className={styles.label}>{displayLabel}</span>
         <span className={styles.meta}>
           {cluster.size} · {pct}%
         </span>
         {anomalyCount > 0 && <span className={styles.anomalyBadge}>{anomalyCount}</span>}
-      </div>
+      </button>
       <div className={`${styles.body}${open ? ` ${styles.open}` : ''}`}>
         {previewEntries.map((entry) => (
           <div key={entry.id} className={styles.preview}>

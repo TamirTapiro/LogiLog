@@ -13,6 +13,14 @@
   cursor: pointer;
   user-select: none;
   background: var(--color-bg-panel, #1a1a1a);
+  /* reset native button styles */
+  width: 100%;
+  border: none;
+  border-radius: 0;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  text-align: left;
 }
 
 .header:hover {

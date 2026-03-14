@@ -28,7 +28,13 @@ export function LogViewer() {
   return (
     <div className={styles.container}>
       <LogSearch />
-      <div className={styles.listWrapper} ref={containerRef}>
+      <div
+        className={styles.listWrapper}
+        ref={containerRef}
+        role="log"
+        aria-live="polite"
+        aria-label="Log entries"
+      >
         {filteredEntries.length > 0 && (
           <FixedSizeList
             ref={listRef}
