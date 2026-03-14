@@ -55,19 +55,13 @@ export function useParseWorker() {
       setState({ isActive: true, error: null })
 
       try {
-        const buffer = await file.arrayBuffer()
         const api = getOrCreateWorker()
 
-        await api.parseBuffer(
-          Comlink.transfer(buffer, [buffer]),
-          file.name,
+        await api.parseFile(
+          file,
           Comlink.proxy((output) => {
             if (output.type === 'batch' && output.entries) {
-              const entries = output.entries.map((e) => ({
-                ...e,
-                level: e.level,
-              }))
-              useStore.getState().appendBatch(entries)
+              useStore.getState().appendBatch(output.entries.map((e) => ({ ...e })))
               updateProgress(output.totalParsed ?? 0)
             } else if (output.type === 'done') {
               finishIngestion(output.totalParsed ?? 0)

@@ -3,7 +3,6 @@ import * as Comlink from 'comlink'
 import type { ContextWorker } from '../workers/context.worker'
 import useStore from '../store'
 import type { LogEntry } from '../types/log.types'
-import type { SmartContext } from '../types/analysis.types'
 
 interface ContextWorkerState {
   isRunning: boolean
@@ -41,40 +40,28 @@ export function useContextWorker() {
 
   const getOrCreateWorker = useCallback((): Comlink.Remote<ContextWorker> => {
     if (!apiRef.current) {
-      workerRef.current = new Worker(
-        new URL('../workers/context.worker.ts', import.meta.url),
-        { type: 'module' },
-      )
+      workerRef.current = new Worker(new URL('../workers/context.worker.ts', import.meta.url), {
+        type: 'module',
+      })
       apiRef.current = Comlink.wrap<ContextWorker>(workerRef.current)
     }
     return apiRef.current
   }, [])
 
   const extractContext = useCallback(
-    async (anchorLogId: number, precedingLines: LogEntry[], relatedIds: number[]) => {
+    async (
+      anchorLogId: number,
+      allLogs: LogEntry[],
+      embeddings: Map<number, Float32Array>,
+      anomalyScore: number,
+    ) => {
       setState({ isRunning: true, error: null })
 
       try {
         const api = getOrCreateWorker()
-        await api.extractContext(
-          anchorLogId,
-          precedingLines,
-          relatedIds,
-          Comlink.proxy((output) => {
-            if (output.type === 'context' && output.narrative != null) {
-              const context: SmartContext = {
-                anchorLogId,
-                precedingLines,
-                narrative: output.narrative,
-                relatedLogIds: output.relatedLogIds ?? [],
-              }
-              useStore.getState().addSmartContext(anchorLogId, context)
-              setState({ isRunning: false })
-            } else if (output.type === 'error') {
-              setState({ isRunning: false, error: output.error ?? 'Context error' })
-            }
-          }),
-        )
+        const result = await api.extractContext(anchorLogId, allLogs, embeddings, anomalyScore)
+        useStore.getState().addSmartContext(anchorLogId, result)
+        setState({ isRunning: false })
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err)
         setState({ isRunning: false, error: msg })

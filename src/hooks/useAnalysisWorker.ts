@@ -39,46 +39,31 @@ export function useAnalysisWorker() {
 
   const getOrCreateWorker = useCallback((): Comlink.Remote<AnalysisWorker> => {
     if (!apiRef.current) {
-      workerRef.current = new Worker(
-        new URL('../workers/analysis.worker.ts', import.meta.url),
-        { type: 'module' },
-      )
+      workerRef.current = new Worker(new URL('../workers/analysis.worker.ts', import.meta.url), {
+        type: 'module',
+      })
       apiRef.current = Comlink.wrap<AnalysisWorker>(workerRef.current)
     }
     return apiRef.current
   }, [])
 
   const runAnalysis = useCallback(
-    async (ids: number[], vectors: Float32Array[]) => {
+    async (ids: number[], vectors: Float32Array[], messages: string[]) => {
       setState({ isRunning: true, error: null })
       useStore.getState().setAnalysisStatus('analyzing')
 
       try {
         const api = getOrCreateWorker()
 
-        // Transfer Float32Arrays to avoid copying large embedding buffers
-        const transferables = vectors.map((v) => v.buffer as ArrayBuffer)
-        await api.analyzeEmbeddings(
-          ids,
-          Comlink.transfer(vectors, transferables),
-          Comlink.proxy((output) => {
-            if (output.type === 'anomalies' && output.anomalies) {
-              useStore.getState().setAnomalies(output.anomalies)
-            } else if (output.type === 'clusters' && output.clusters) {
-              useStore.getState().setClusters(
-                output.clusters.map((c) => ({
-                  ...c,
-                  centroid: c.centroid,
-                })),
-              )
-              useStore.getState().setAnalysisStatus('done')
-              setState({ isRunning: false })
-            } else if (output.type === 'error') {
-              setState({ isRunning: false, error: output.error ?? 'Analysis error' })
-              useStore.getState().setAnalysisStatus('error')
-            }
-          }),
-        )
+        const [anomalies, clusters] = await Promise.all([
+          api.scoreAnomalies(vectors, ids),
+          api.cluster(vectors, ids, messages),
+        ])
+
+        useStore.getState().setAnomalies(anomalies)
+        useStore.getState().setClusters(clusters)
+        useStore.getState().setAnalysisStatus('done')
+        setState({ isRunning: false })
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err)
         setState({ isRunning: false, error: msg })

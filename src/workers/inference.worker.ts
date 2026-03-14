@@ -10,11 +10,7 @@ if (env.backends?.onnx?.wasm) {
 }
 env.allowRemoteModels = true
 
-export type WorkerProgressEventType =
-  | 'download-progress'
-  | 'embed-progress'
-  | 'ready'
-  | 'error'
+export type WorkerProgressEventType = 'download-progress' | 'embed-progress' | 'ready' | 'error'
 
 export interface WorkerProgressEvent {
   type: WorkerProgressEventType
@@ -31,10 +27,7 @@ export interface InferenceWorkerAPI {
   initialize(
     onProgress: (event: WorkerProgressEvent) => void,
   ): Promise<{ device: string; modelId: string; dtype: string }>
-  embed(
-    texts: string[],
-    onProgress?: (event: WorkerProgressEvent) => void,
-  ): Promise<Float32Array[]>
+  embed(texts: string[], onProgress?: (event: WorkerProgressEvent) => void): Promise<Float32Array[]>
   isReady(): boolean
 }
 
@@ -52,7 +45,9 @@ const cache = new IDBModelCache()
 async function negotiateDevice(): Promise<string> {
   try {
     if ('gpu' in navigator) {
-      const adapter = await (navigator as unknown as { gpu: { requestAdapter(): Promise<unknown> } }).gpu.requestAdapter()
+      const adapter = await (
+        navigator as unknown as { gpu: { requestAdapter(): Promise<unknown> } }
+      ).gpu.requestAdapter()
       if (adapter !== null) return 'webgpu'
     }
   } catch {
@@ -113,7 +108,7 @@ const inferenceWorker: InferenceWorkerAPI = {
       })
 
       // Step 7 — Warmup: run one dummy forward pass
-      await _pipe(['warmup'], { pooling: 'mean', normalize: true })
+      if (_pipe) await _pipe(['warmup'], { pooling: 'mean', normalize: true })
 
       _ready = true
       onProgress({ type: 'ready' })
@@ -128,9 +123,12 @@ const inferenceWorker: InferenceWorkerAPI = {
 
   async embed(texts, onProgress) {
     if (!_pipe) throw new Error('Inference worker not initialized')
-    return embedTexts(_pipe, texts, onProgress
-      ? (embedded, total) => onProgress({ type: 'embed-progress', embedded, total })
-      : undefined,
+    return embedTexts(
+      _pipe,
+      texts,
+      onProgress
+        ? (embedded, total) => onProgress({ type: 'embed-progress', embedded, total })
+        : undefined,
     )
   },
 }

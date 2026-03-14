@@ -40,10 +40,9 @@ export function useInferenceWorker() {
 
   const getOrCreateWorker = useCallback((): Comlink.Remote<InferenceWorker> => {
     if (!apiRef.current) {
-      workerRef.current = new Worker(
-        new URL('../workers/inference.worker.ts', import.meta.url),
-        { type: 'module' },
-      )
+      workerRef.current = new Worker(new URL('../workers/inference.worker.ts', import.meta.url), {
+        type: 'module',
+      })
       apiRef.current = Comlink.wrap<InferenceWorker>(workerRef.current)
     }
     return apiRef.current
@@ -57,28 +56,27 @@ export function useInferenceWorker() {
   }, [getOrCreateWorker, setState])
 
   const embedLogs = useCallback(
-    async (messages: string[], ids: number[]) => {
+    async (messages: string[]) => {
       setState({ isRunning: true, error: null })
-      useStore.getState().setAnalysisStatus('embedding')
+      useStore.getState().setAnalysisStatus('analyzing')
 
       try {
         const api = getOrCreateWorker()
-        await api.embed(
+        const embeddings = await api.embed(
           messages,
-          ids,
-          Comlink.proxy((output) => {
-            if (output.type === 'error') {
-              setState({ isRunning: false, error: output.error ?? 'Inference error' })
-              useStore.getState().setAnalysisStatus('error')
+          Comlink.proxy((event) => {
+            if (event.type === 'embed-progress') {
+              // progress update — could update store if needed
             }
-            // Embeddings forwarded to analysis worker in real implementation
           }),
         )
         setState({ isRunning: false })
+        return embeddings
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err)
         setState({ isRunning: false, error: msg })
         useStore.getState().setAnalysisStatus('error')
+        return null
       }
     },
     [getOrCreateWorker, setState],
