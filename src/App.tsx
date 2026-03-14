@@ -3,40 +3,26 @@ import { AppShell } from './components/layout/AppShell'
 import { ErrorBoundary } from './components/shared/ErrorBoundary'
 import { KeyboardShortcutsModal } from './components/shared/KeyboardShortcutsModal'
 import { FileDropZone } from './components/ingestion/FileDropZone'
+import { Timeline } from './components/timeline/Timeline'
+import { LogViewer } from './components/logs/LogViewer'
+import { ClusteringView } from './components/clustering/ClusteringView'
+import { AnomalyList } from './components/anomaly/AnomalyList'
 import { useKeyboardNavigation } from './hooks/useKeyboardNavigation'
 import useStore from './store'
-import type { ActivePanel } from './types/store.types'
-
-const PANEL_LABELS: Record<ActivePanel, string> = {
-  timeline: 'Timeline',
-  logs: 'Log Viewer',
-  clusters: 'Clusters',
-  anomalies: 'Anomalies',
-}
 
 function PanelContent() {
   const activePanel = useStore((s) => s.ui.activePanel)
   const ingestionStatus = useStore((s) => s.ingestion.status)
-  const label = PANEL_LABELS[activePanel]
 
   if (ingestionStatus === 'idle') {
     return <FileDropZone />
   }
 
-  return (
-    <div
-      style={{
-        flex: 1,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: 'var(--color-text-muted)',
-        fontSize: 'var(--font-size-sm)',
-      }}
-    >
-      {label}
-    </div>
-  )
+  if (activePanel === 'timeline') return <Timeline />
+  if (activePanel === 'logs') return <LogViewer />
+  if (activePanel === 'clusters') return <ClusteringView />
+  if (activePanel === 'anomalies') return <AnomalyList />
+  return null
 }
 
 function App() {
