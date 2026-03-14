@@ -1,0 +1,254 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--color-bg-primary);
+  overflow: hidden;
+}
+
+.scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-5) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+/* ── Section ─────────────────────────────────────── */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.sectionTitle {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--color-accent-green);
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-2);
+}
+
+.sectionSubtitle {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+/* ── Cluster list ─────────────────────────────────── */
+
+.clusterList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.clusterRow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+.anomalousRow {
+  background: rgba(255, 68, 68, 0.06);
+}
+
+.marker {
+  font-weight: 700;
+  font-size: var(--font-size-xs);
+  min-width: 2.5rem;
+}
+
+.markerAlert {
+  color: var(--color-accent-red);
+}
+
+.markerNormal {
+  color: var(--color-accent-green);
+}
+
+.clusterLabel {
+  flex: 1;
+  color: var(--color-text-primary);
+}
+
+.clusterCount {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+}
+
+/* ── Log context block ───────────────────────────── */
+
+.logBlock {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-x: auto;
+}
+
+.logLine {
+  display: flex;
+  gap: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-log);
+  opacity: 0.7;
+}
+
+.anchorLine {
+  display: flex;
+  gap: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-log);
+  background: rgba(255, 184, 0, 0.08);
+  border-left: 2px solid var(--color-accent-amber);
+  padding-left: var(--space-2);
+  margin-top: var(--space-1);
+}
+
+.logTs {
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.logLevel {
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 5ch;
+}
+
+.logMsg {
+  color: var(--color-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.anchorLine .logMsg {
+  color: var(--color-text-primary);
+}
+
+.anchorTag {
+  margin-left: auto;
+  color: var(--color-accent-amber);
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-size: var(--font-size-xs);
+}
+
+/* Log level colours */
+.levelERROR,
+.levelFATAL {
+  color: var(--color-level-error);
+}
+
+.levelWARN {
+  color: var(--color-level-warn);
+}
+
+.levelINFO {
+  color: var(--color-level-info);
+}
+
+.levelDEBUG {
+  color: var(--color-level-debug);
+}
+
+.levelTRACE,
+.levelUNKNOWN {
+  color: var(--color-text-muted);
+}
+
+/* ── Forensics blocks ────────────────────────────── */
+
+.forensicsBlock {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.blockTitle {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+}
+
+.narrative {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.fix {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  color: var(--color-accent-amber);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ── Metrics ─────────────────────────────────────── */
+
+.metricRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-2);
+}
+
+.metricRow:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.metricLabel {
+  color: var(--color-text-secondary);
+}
+
+.metricValue {
+  color: var(--color-accent-green);
+  text-align: right;
+}
+
+.metricTag {
+  color: var(--color-text-muted);
+}

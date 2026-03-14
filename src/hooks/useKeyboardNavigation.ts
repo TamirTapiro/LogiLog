@@ -153,6 +153,12 @@ export function useKeyboardNavigation(): {
           break
         }
 
+        case '5': {
+          e.preventDefault()
+          state.setActivePanel('forensics')
+          break
+        }
+
         case '?': {
           e.preventDefault()
           setShowShortcuts((prev) => !prev)

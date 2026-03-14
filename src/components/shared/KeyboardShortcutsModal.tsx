@@ -44,6 +44,7 @@ const SHORTCUT_SECTIONS: ShortcutSection[] = [
       { keys: ['2'], description: 'Log Viewer' },
       { keys: ['3'], description: 'Clusters' },
       { keys: ['4'], description: 'Anomalies' },
+      { keys: ['5'], description: 'AI Forensics' },
     ],
   },
   {

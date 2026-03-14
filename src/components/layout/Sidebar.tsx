@@ -9,6 +9,7 @@ const NAV_ITEMS: Array<{ panel: ActivePanel; label: string; key: string }> = [
   { panel: 'logs', label: 'Log Viewer', key: '2' },
   { panel: 'clusters', label: 'Clusters', key: '3' },
   { panel: 'anomalies', label: 'Anomalies', key: '4' },
+  { panel: 'forensics', label: 'AI Forensics', key: '5' },
 ]
 
 export function Sidebar() {

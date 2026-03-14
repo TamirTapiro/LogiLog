@@ -2,10 +2,12 @@ import { useEffect } from 'react'
 import useStore from '../store'
 import { useInferenceWorker } from './useInferenceWorker'
 import { useAnalysisWorker } from './useAnalysisWorker'
+import { useContextWorker } from './useContextWorker'
 
 export function useAnalysisPipeline() {
   const { embedLogs } = useInferenceWorker()
   const { runAnalysis } = useAnalysisWorker()
+  const { extractContext } = useContextWorker()
   const ingestionStatus = useStore((s) => s.ingestion.status)
   const analysisStatus = useStore((s) => s.analysis.analysisStatus)
 
@@ -30,7 +32,19 @@ export function useAnalysisPipeline() {
     void (async () => {
       const embeddings = await embedLogs(messages)
       if (!embeddings) return
+
       await runAnalysis(ids, embeddings, messages)
+
+      // Build embedding map and extract context for the top anomaly
+      const embeddingMap = new Map<number, Float32Array>()
+      ids.forEach((id, i) => embeddingMap.set(id, embeddings[i]!))
+
+      const { anomalies } = useStore.getState().analysis
+      const top = anomalies[0]
+      if (top) {
+        const allLogs = useStore.getState().logs.entries
+        await extractContext(top.logId, allLogs, embeddingMap, top.score)
+      }
     })()
-  }, [ingestionStatus, analysisStatus, embedLogs, runAnalysis])
+  }, [ingestionStatus, analysisStatus, embedLogs, runAnalysis, extractContext])
 }

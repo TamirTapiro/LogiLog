@@ -7,6 +7,7 @@ import { Timeline } from './components/timeline/Timeline'
 import { LogViewer } from './components/logs/LogViewer'
 import { ClusteringView } from './components/clustering/ClusteringView'
 import { AnomalyList } from './components/anomaly/AnomalyList'
+import { ForensicsView } from './components/forensics/ForensicsView'
 import { useKeyboardNavigation } from './hooks/useKeyboardNavigation'
 import { useAnalysisPipeline } from './hooks/useAnalysisPipeline'
 import useStore from './store'
@@ -23,6 +24,7 @@ function PanelContent() {
   if (activePanel === 'logs') return <LogViewer />
   if (activePanel === 'clusters') return <ClusteringView />
   if (activePanel === 'anomalies') return <AnomalyList />
+  if (activePanel === 'forensics') return <ForensicsView />
   return null
 }
 

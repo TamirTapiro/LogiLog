@@ -29,7 +29,7 @@ export interface AnalysisState {
 }
 
 // UI slice state
-export type ActivePanel = 'timeline' | 'logs' | 'clusters' | 'anomalies'
+export type ActivePanel = 'timeline' | 'logs' | 'clusters' | 'anomalies' | 'forensics'
 
 export interface UiState {
   selectedLogId: number | null
