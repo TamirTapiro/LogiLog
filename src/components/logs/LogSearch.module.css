@@ -1,0 +1,43 @@
+.container {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.75rem;
+  background: var(--color-bg-panel, #1a1a1a);
+  border-bottom: 1px solid var(--color-border, #333);
+}
+
+.input {
+  flex: 1;
+  background: transparent;
+  border: 1px solid var(--color-border, #333);
+  border-radius: 4px;
+  color: inherit;
+  font-size: var(--font-size-sm, 0.75rem);
+  font-family: monospace;
+  padding: 0.25rem 0.5rem;
+  outline: none;
+}
+
+.input:focus {
+  border-color: var(--color-accent-blue, #60a5fa);
+}
+
+.toggle {
+  background: transparent;
+  border: 1px solid var(--color-border, #333);
+  border-radius: 4px;
+  color: var(--color-text-muted, #888);
+  cursor: pointer;
+  font-size: var(--font-size-sm, 0.75rem);
+  padding: 0.2rem 0.5rem;
+  white-space: nowrap;
+}
+
+.toggle.active {
+  border-color: var(--color-accent-blue, #60a5fa);
+  color: var(--color-accent-blue, #60a5fa);
+}
