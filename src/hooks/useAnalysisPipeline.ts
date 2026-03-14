@@ -3,6 +3,7 @@ import useStore from '../store'
 import { useInferenceWorker } from './useInferenceWorker'
 import { useAnalysisWorker } from './useAnalysisWorker'
 import { useContextWorker } from './useContextWorker'
+import { runAiForensics } from '../lib/forensicsAI'
 
 export function useAnalysisPipeline() {
   const { embedLogs } = useInferenceWorker()
@@ -44,6 +45,27 @@ export function useAnalysisPipeline() {
       if (top) {
         const allLogs = useStore.getState().logs.entries
         await extractContext(top.logId, allLogs, embeddingMap, top.score)
+
+        // Run AI forensics after context is ready
+        const store = useStore.getState()
+        const topLog = store.logs.entries.find((e) => e.id === top.logId)
+        if (topLog) {
+          store.setAiForensics(null, 'loading')
+          try {
+            const context = store.analysis.smartContexts[top.logId]
+            const result = await runAiForensics({
+              log: topLog,
+              context,
+              score: top.score,
+              rank: top.rank,
+              totalAnomalies: store.analysis.anomalies.length,
+            })
+            useStore.getState().setAiForensics(result, 'done')
+          } catch (err) {
+            const isNoKey = err instanceof Error && err.message === 'no-key'
+            useStore.getState().setAiForensics(null, isNoKey ? 'no-key' : 'error')
+          }
+        }
       }
     })()
   }, [ingestionStatus, analysisStatus, embedLogs, runAnalysis, extractContext])

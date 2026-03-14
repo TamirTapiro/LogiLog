@@ -21,11 +21,18 @@ export interface LogsState {
 // Analysis slice state
 export type AnalysisStatus = 'idle' | 'embedding' | 'analyzing' | 'done' | 'error'
 
+export interface AiForensicsResult {
+  rootCause: string
+  suggestedFix: string
+}
+
 export interface AnalysisState {
   anomalies: AnomalyResult[]
   clusters: ClusterResult[]
   smartContexts: Record<number, SmartContext>
   analysisStatus: AnalysisStatus
+  aiForensics: AiForensicsResult | null
+  aiForensicsStatus: 'idle' | 'loading' | 'done' | 'error' | 'no-key'
 }
 
 // UI slice state

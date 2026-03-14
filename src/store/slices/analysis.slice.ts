@@ -1,5 +1,5 @@
 import type { StateCreator } from 'zustand'
-import type { AnalysisState } from '../../types/store.types'
+import type { AnalysisState, AiForensicsResult } from '../../types/store.types'
 import type { AnomalyResult, ClusterResult, SmartContext } from '../../types/analysis.types'
 
 export interface AnalysisSlice {
@@ -9,6 +9,7 @@ export interface AnalysisSlice {
   addSmartContext: (logId: number, context: SmartContext) => void
   resetAnalysis: () => void
   setAnalysisStatus: (status: AnalysisState['analysisStatus']) => void
+  setAiForensics: (result: AiForensicsResult | null, status: AnalysisState['aiForensicsStatus']) => void
 }
 
 const initialAnalysisState: AnalysisState = {
@@ -16,6 +17,8 @@ const initialAnalysisState: AnalysisState = {
   clusters: [],
   smartContexts: {},
   analysisStatus: 'idle',
+  aiForensics: null,
+  aiForensicsStatus: 'idle',
 }
 
 export const createAnalysisSlice: StateCreator<AnalysisSlice> = (set) => ({
@@ -58,6 +61,15 @@ export const createAnalysisSlice: StateCreator<AnalysisSlice> = (set) => ({
       analysis: {
         ...state.analysis,
         analysisStatus,
+      },
+    })),
+
+  setAiForensics: (aiForensics, aiForensicsStatus) =>
+    set((state) => ({
+      analysis: {
+        ...state.analysis,
+        aiForensics,
+        aiForensicsStatus,
       },
     })),
 })

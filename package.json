@@ -15,6 +15,7 @@
     "lighthouse": "lhci autorun"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.78.0",
     "@huggingface/transformers": "^3.8.1",
     "browser-fs-access": "^0.35.0",
     "comlink": "^4.4.2",

@@ -51,6 +51,8 @@ export function ForensicsView() {
   const clusters = useStore((s) => s.analysis.clusters)
   const smartContexts = useStore((s) => s.analysis.smartContexts)
   const analysisStatus = useStore((s) => s.analysis.analysisStatus)
+  const aiForensics = useStore((s) => s.analysis.aiForensics)
+  const aiForensicsStatus = useStore((s) => s.analysis.aiForensicsStatus)
   const entries = useStore((s) => s.logs.entries)
 
   const topAnomaly = anomalies[0]
@@ -146,16 +148,46 @@ export function ForensicsView() {
 
           <div className={styles.forensicsBlock}>
             <div className={styles.blockTitle}>ROOT CAUSE ANALYSIS</div>
-            <p className={styles.narrative}>
-              {topContext?.narrative ??
-                `Anomaly detected in ${topLog?.source ?? 'unknown source'} (score: ${topAnomaly?.score.toFixed(3)}). No context extracted yet.`}
-            </p>
+            {aiForensicsStatus === 'loading' ? (
+              <p className={styles.narrative}>Analyzing with Claude AI…</p>
+            ) : aiForensicsStatus === 'done' && aiForensics ? (
+              <p className={styles.narrative}>{aiForensics.rootCause}</p>
+            ) : aiForensicsStatus === 'no-key' ? (
+              <p className={styles.narrative}>
+                {topContext?.narrative ??
+                  `Anomaly detected in ${topLog?.source ?? 'unknown source'} (score: ${topAnomaly?.score.toFixed(3)}).`}
+                <br />
+                <span className={styles.noKey}>
+                  Set VITE_ANTHROPIC_API_KEY in .env for AI-powered analysis.
+                </span>
+              </p>
+            ) : aiForensicsStatus === 'error' ? (
+              <p className={styles.narrative}>
+                {topContext?.narrative ??
+                  `Anomaly detected in ${topLog?.source ?? 'unknown source'} (score: ${topAnomaly?.score.toFixed(3)}).`}
+                <br />
+                <span className={styles.aiError}>
+                  AI analysis failed. Check console for details.
+                </span>
+              </p>
+            ) : (
+              <p className={styles.narrative}>
+                {topContext?.narrative ??
+                  `Anomaly detected in ${topLog?.source ?? 'unknown source'} (score: ${topAnomaly?.score.toFixed(3)}). No context extracted yet.`}
+              </p>
+            )}
           </div>
 
-          {topLog && (
+          {(aiForensicsStatus === 'done' && aiForensics ? true : topLog !== undefined) && (
             <div className={styles.forensicsBlock}>
               <div className={styles.blockTitle}>Suggested Fix</div>
-              <p className={styles.fix}>{suggestedFix(topLog.message, topLog.source)}</p>
+              {aiForensicsStatus === 'loading' ? (
+                <p className={styles.fix}>Generating fix recommendation…</p>
+              ) : aiForensicsStatus === 'done' && aiForensics ? (
+                <p className={styles.fix}>{aiForensics.suggestedFix}</p>
+              ) : topLog ? (
+                <p className={styles.fix}>{suggestedFix(topLog.message, topLog.source)}</p>
+              ) : null}
             </div>
           )}
 

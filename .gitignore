@@ -41,3 +41,8 @@ yarn.lock
 
 # Scratch / temp files
 example.txt
+
+# Environment variables (API keys)
+.env
+.env.local
+.env.*.local

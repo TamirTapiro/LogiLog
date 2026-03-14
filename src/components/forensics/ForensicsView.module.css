@@ -252,3 +252,13 @@
 .metricTag {
   color: var(--color-text-muted);
 }
+
+.noKey {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+}
+
+.aiError {
+  color: var(--color-accent-red);
+  font-size: var(--font-size-xs);
+}
