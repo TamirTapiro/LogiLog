@@ -4,12 +4,6 @@ import { Spinner } from '../shared/Spinner'
 import type { LogEntry } from '../../types/log.types'
 import styles from './SmartContextPanel.module.css'
 
-interface _CollapsedGroup {
-  startIdx: number
-  endIdx: number
-  expanded: boolean
-}
-
 function buildGroups(
   lines: LogEntry[],
   anchorLogId: number,
