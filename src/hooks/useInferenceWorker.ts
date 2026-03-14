@@ -58,10 +58,23 @@ export function useInferenceWorker() {
   const embedLogs = useCallback(
     async (messages: string[]) => {
       setState({ isRunning: true, error: null })
-      useStore.getState().setAnalysisStatus('analyzing')
 
       try {
         const api = getOrCreateWorker()
+
+        // Initialize model if not yet ready
+        const ready = await api.isReady()
+        if (!ready) {
+          useStore.getState().setAnalysisStatus('embedding')
+          await api.initialize(
+            Comlink.proxy((_: WorkerProgressEvent) => {
+              // progress update — could update store if needed
+            }),
+          )
+          setState({ isReady: true })
+        }
+
+        useStore.getState().setAnalysisStatus('analyzing')
         const embeddings = await api.embed(
           messages,
           Comlink.proxy((_: WorkerProgressEvent) => {

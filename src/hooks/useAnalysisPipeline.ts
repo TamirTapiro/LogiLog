@@ -27,8 +27,6 @@ export function useAnalysisPipeline() {
     const messages = entries.map((e) => e.message)
     const ids = entries.map((e) => e.id)
 
-    useStore.getState().setAnalysisStatus('embedding')
-
     void (async () => {
       const embeddings = await embedLogs(messages)
       if (!embeddings) return
