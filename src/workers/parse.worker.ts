@@ -1,4 +1,5 @@
 import * as Comlink from 'comlink'
+import { Decompress, unzipSync } from 'fflate'
 import { ParserRegistry } from './parsers/registry'
 import type { ParseWorkerOutput } from './worker.types'
 
@@ -15,6 +16,84 @@ export interface ParseWorkerAPI {
 
 let _cancelled = false
 
+async function decompressGz(
+  file: File,
+  onBatch: (output: ParseWorkerOutput) => void,
+): Promise<Blob> {
+  const chunks: Uint8Array[] = []
+  let decompressedBytesRead = 0
+  let compressedBytesRead = 0
+
+  await new Promise<void>((resolve, reject) => {
+    const decomp = new Decompress((chunk, _final) => {
+      chunks.push(chunk)
+      decompressedBytesRead += chunk.byteLength
+      onBatch({ type: 'progress', compressedBytesRead, decompressedBytesRead })
+    })
+
+    const reader = file.stream().getReader()
+
+    const pump = () => {
+      reader
+        .read()
+        .then(({ done, value }) => {
+          if (done) {
+            resolve()
+            return
+          }
+          compressedBytesRead += value.byteLength
+          decomp.push(value, false)
+          pump()
+        })
+        .catch(reject)
+    }
+
+    pump()
+  })
+
+  const totalLength = chunks.reduce((sum, c) => sum + c.byteLength, 0)
+  const merged = new Uint8Array(totalLength)
+  let offset = 0
+  for (const chunk of chunks) {
+    merged.set(chunk, offset)
+    offset += chunk.byteLength
+  }
+
+  return new Blob([merged])
+}
+
+async function decompressZip(
+  file: File,
+  onBatch: (output: ParseWorkerOutput) => void,
+): Promise<Blob> {
+  const buffer = await file.arrayBuffer()
+  const entries = unzipSync(new Uint8Array(buffer))
+
+  const logExtensions = ['.log', '.txt', '.csv']
+  const logEntries = Object.keys(entries).filter((name) =>
+    logExtensions.some((ext) => name.toLowerCase().endsWith(ext)),
+  )
+
+  if (logEntries.length === 0) {
+    onBatch({ type: 'error', error: 'No .log, .txt, or .csv files found inside the ZIP archive.' })
+    return new Blob([])
+  }
+
+  if (logEntries.length > 1) {
+    const names = logEntries.join(', ')
+    onBatch({
+      type: 'error',
+      error: `Multiple log files found in ZIP (${names}). Using the largest one.`,
+    })
+  }
+
+  const largest = logEntries.reduce((best, name) =>
+    entries[name].byteLength > entries[best].byteLength ? name : best,
+  )
+
+  return new Blob([entries[largest]])
+}
+
 const worker: ParseWorkerAPI = {
   cancel() {
     _cancelled = true
@@ -27,10 +106,21 @@ const worker: ParseWorkerAPI = {
     let parsedLines = 0
     const batchEntries: ParseWorkerOutput['entries'] = []
 
+    // --- Decompression phase ---
+    const nameLower = file.name.toLowerCase()
+    let source: Blob = file
+
+    if (nameLower.endsWith('.gz')) {
+      source = await decompressGz(file, onBatch)
+    } else if (nameLower.endsWith('.zip')) {
+      source = await decompressZip(file, onBatch)
+      if (source.size === 0) return
+    }
+
     // --- Phase 1: collect first SAMPLE_SIZE lines for format detection ---
     const sampleLines: string[] = []
     let sampleBuffer = ''
-    const sampleReader = file.stream().getReader()
+    const sampleReader = source.stream().getReader()
     const sampleDecoder = new TextDecoder()
     let sampleDone = false
 
@@ -55,7 +145,7 @@ const worker: ParseWorkerAPI = {
     const registry = new ParserRegistry(sampleLines)
 
     // --- Phase 2: full streaming parse ---
-    const reader = file.stream().getReader()
+    const reader = source.stream().getReader()
     const decoder = new TextDecoder()
     let remainder = ''
 

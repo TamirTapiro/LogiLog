@@ -25,11 +25,13 @@ export interface ParseWorkerInput {
 }
 
 export interface ParseWorkerOutput {
-  type: 'batch' | 'done' | 'error'
+  type: 'batch' | 'done' | 'error' | 'progress'
   entries?: WorkerLogEntry[]
   totalParsed?: number
   done?: boolean
   error?: string
+  compressedBytesRead?: number
+  decompressedBytesRead?: number
 }
 
 // ---- Inference worker ----
