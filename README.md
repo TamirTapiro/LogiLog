@@ -14,12 +14,12 @@ Traditional observability platforms (Datadog, Splunk, Grafana Cloud) charge $0.5
 
 LogiLog solves this by moving all computation into the browser:
 
-| Problem | LogiLog's answer |
-|---|---|
-| Cloud platforms are expensive | Zero infrastructure, zero per-inference cost |
-| Logs contain PII / credentials | Data never leaves your device |
-| `grep` misses semantic patterns | Transformer embeddings understand meaning, not just text |
-| Too much noise to find signal | ML clustering groups repetitive lines so you can ignore them |
+| Problem                         | LogiLog's answer                                                |
+| ------------------------------- | --------------------------------------------------------------- |
+| Cloud platforms are expensive   | Zero infrastructure, zero per-inference cost                    |
+| Logs contain PII / credentials  | Data never leaves your device                                   |
+| `grep` misses semantic patterns | Transformer embeddings understand meaning, not just text        |
+| Too much noise to find signal   | ML clustering groups repetitive lines so you can ignore them    |
 | Root cause is buried in context | Smart Context captures the 50–100 lines that led to the failure |
 
 ---
@@ -27,34 +27,40 @@ LogiLog solves this by moving all computation into the browser:
 ## Features
 
 ### Semantic Anomaly Detection
+
 Generates vector embeddings for each log line using a quantized transformer model, then scores each line by its cosine distance from normal patterns. Lines that are semantically unique — even if they don't contain the word "ERROR" — are surfaced as anomalies.
 
 ### Smart Context Forensic Capture
+
 When an anomaly is detected, LogiLog automatically extracts the surrounding context: the 50–100 lines preceding the event that explain the failure chain. Instead of a naked error, you get the full story.
 
 ### Log Clustering
+
 Groups semantically similar log lines into collapsible clusters. Repetitive background noise (health checks, cache hits, metrics collection) is collapsed so you can focus on what changed.
 
 ### Interactive Timeline
+
 Visualizes log volume over time with AI-detected anomaly spikes highlighted. Designed for incident response — the mental model of "when did this start?" is answered at a glance.
 
 ### Vim-style Keyboard Navigation
+
 Full keyboard control for power users and SREs navigating logs under pressure.
 
 ![Keyboard Shortcuts](docs/screenshot-shortcuts.png)
 
-| Key | Action |
-|---|---|
-| `j` / `k` | Next / previous log row |
-| `g` / `G` | Jump to first / last row |
-| `Enter` | Select focused row |
-| `n` / `N` | Next / previous anomaly |
-| `/` | Focus search input |
-| `Esc` | Clear search |
-| `1`–`4` | Switch panels |
-| `?` | Open this shortcuts modal |
+| Key       | Action                    |
+| --------- | ------------------------- |
+| `j` / `k` | Next / previous log row   |
+| `g` / `G` | Jump to first / last row  |
+| `Enter`   | Select focused row        |
+| `n` / `N` | Next / previous anomaly   |
+| `/`       | Focus search input        |
+| `Esc`     | Clear search              |
+| `1`–`4`   | Switch panels             |
+| `?`       | Open this shortcuts modal |
 
 ### Export
+
 Detected anomalies, clusters, and Smart Context results can be exported as JSON or CSV for post-incident reports or sharing with teammates.
 
 ---
@@ -115,12 +121,12 @@ LogiLog will detect the pool exhaustion as a semantic anomaly, cluster the repea
 
 WebGPU is required for hardware-accelerated inference.
 
-| Browser | Support |
-|---|---|
+| Browser     | Support                           |
+| ----------- | --------------------------------- |
 | Chrome 113+ | Full (WebGPU + SharedArrayBuffer) |
-| Edge 113+ | Full |
-| Firefox | Partial (WebGPU behind flag) |
-| Safari 18+ | Partial (WebGPU available) |
+| Edge 113+   | Full                              |
+| Firefox     | Partial (WebGPU behind flag)      |
+| Safari 18+  | Partial (WebGPU available)        |
 
 > **Note:** LogiLog requires `Cross-Origin-Opener-Policy: same-origin` and `Cross-Origin-Embedder-Policy: require-corp` headers for SharedArrayBuffer support. These are set automatically on GitHub Pages via the included `_headers` file.
 
@@ -140,16 +146,16 @@ npm run lighthouse   # Lighthouse CI
 
 ### Tech Stack
 
-| Layer | Choice |
-|---|---|
-| Framework | React 19, TypeScript (strict) |
-| ML Runtime | Transformers.js v3, WebGPU backend |
-| State | Zustand |
+| Layer          | Choice                                       |
+| -------------- | -------------------------------------------- |
+| Framework      | React 19, TypeScript (strict)                |
+| ML Runtime     | Transformers.js v3, WebGPU backend           |
+| State          | Zustand                                      |
 | Virtualization | react-window (handles millions of log lines) |
-| Charts | Recharts |
-| Build | Vite 6 |
-| Tests | Vitest + Playwright |
-| Deploy | GitHub Pages (static, zero backend) |
+| Charts         | Recharts                                     |
+| Build          | Vite 6                                       |
+| Tests          | Vitest + Playwright                          |
+| Deploy         | GitHub Pages (static, zero backend)          |
 
 ---
 
