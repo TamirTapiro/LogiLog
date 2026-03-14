@@ -9,10 +9,7 @@ const SAMPLE_SIZE = 20
 export type ParseWorker = ParseWorkerAPI
 
 export interface ParseWorkerAPI {
-  parseFile(
-    file: File,
-    onBatch: (output: ParseWorkerOutput) => void,
-  ): Promise<void>
+  parseFile(file: File, onBatch: (output: ParseWorkerOutput) => void): Promise<void>
   cancel(): void
 }
 
@@ -39,7 +36,10 @@ const worker: ParseWorkerAPI = {
 
     while (sampleLines.length < SAMPLE_SIZE && !sampleDone) {
       const { done, value } = await sampleReader.read()
-      if (done) { sampleDone = true; break }
+      if (done) {
+        sampleDone = true
+        break
+      }
       sampleBuffer += sampleDecoder.decode(value, { stream: true })
       const newline = sampleBuffer.lastIndexOf('\n')
       if (newline === -1) continue
@@ -76,7 +76,10 @@ const worker: ParseWorkerAPI = {
       const lines = chunk.split('\n')
 
       for (const raw of lines) {
-        if (_cancelled) { reader.cancel(); return }
+        if (_cancelled) {
+          reader.cancel()
+          return
+        }
         const lineBytes = new TextEncoder().encode(raw + '\n').byteLength
 
         if (!raw.trim()) {
@@ -103,7 +106,12 @@ const worker: ParseWorkerAPI = {
         byteOffset += lineBytes
 
         if (batchEntries!.length >= BATCH_SIZE) {
-          onBatch({ type: 'batch', entries: [...batchEntries!], totalParsed: parsedLines, done: false })
+          onBatch({
+            type: 'batch',
+            entries: [...batchEntries!],
+            totalParsed: parsedLines,
+            done: false,
+          })
           batchEntries!.length = 0
         }
       }

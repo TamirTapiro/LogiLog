@@ -34,7 +34,9 @@ export const JsonParser: LogParser = {
     const ts = extractTimestamp(obj)
     const level = normalizeLevel(String(obj['level'] ?? obj['severity'] ?? obj['lvl'] ?? 'unknown'))
     const message = String(obj['msg'] ?? obj['message'] ?? obj['text'] ?? obj['log'] ?? t)
-    const source = String(obj['source'] ?? obj['logger'] ?? obj['service'] ?? obj['component'] ?? '')
+    const source = String(
+      obj['source'] ?? obj['logger'] ?? obj['service'] ?? obj['component'] ?? '',
+    )
 
     return {
       timestamp: ts,

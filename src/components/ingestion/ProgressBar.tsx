@@ -30,8 +30,7 @@ export function ProgressBar() {
 
   const activeStatuses = ['loading', 'parsing', 'analyzing', 'embedding']
   const isActive =
-    activeStatuses.includes(ingestion.status) ||
-    activeStatuses.includes(analysisStatus)
+    activeStatuses.includes(ingestion.status) || activeStatuses.includes(analysisStatus)
 
   if (!isActive) return null
 
@@ -55,9 +54,7 @@ export function ProgressBar() {
       </div>
       <div className={styles.label}>
         <span>{percent}%</span>
-        {linesPerSec > 0 && (
-          <span>{linesPerSec.toLocaleString()} lines/sec</span>
-        )}
+        {linesPerSec > 0 && <span>{linesPerSec.toLocaleString()} lines/sec</span>}
         <span>{ingestion.parsedLines.toLocaleString()} lines</span>
       </div>
       {modelNotReady && (

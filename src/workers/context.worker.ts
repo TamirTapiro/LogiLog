@@ -4,9 +4,9 @@ import type { LogEntry } from '../types/log.types'
 import { cosineSimilarity, cosineDistance } from '../lib/cosineSimilarity'
 
 const CONTEXT_WINDOW_SIZE = 75
-const DEDUP_THRESHOLD = 0.05   // cosine distance below this → duplicate
-const DEDUP_CONSECUTIVE = 10   // collapse runs of ≥10 near-duplicates
-const RELATED_THRESHOLD = 0.6  // similarity to anchor to be considered related
+const DEDUP_THRESHOLD = 0.05 // cosine distance below this → duplicate
+const DEDUP_CONSECUTIVE = 10 // collapse runs of ≥10 near-duplicates
+const RELATED_THRESHOLD = 0.6 // similarity to anchor to be considered related
 
 function extractContext(
   anchorLogId: number,
@@ -58,10 +58,7 @@ function extractContext(
   }
 }
 
-function deduplicateLines(
-  lines: LogEntry[],
-  embeddings: Map<number, Float32Array>,
-): LogEntry[] {
+function deduplicateLines(lines: LogEntry[], embeddings: Map<number, Float32Array>): LogEntry[] {
   if (lines.length === 0) return []
   const result: LogEntry[] = []
   let runStart = 0
@@ -73,9 +70,7 @@ function deduplicateLines(
     const currEmb = curr ? embeddings.get(curr.id) : undefined
 
     const isNearDup =
-      currEmb && prevEmb
-        ? cosineDistance(prevEmb, currEmb) < DEDUP_THRESHOLD
-        : false
+      currEmb && prevEmb ? cosineDistance(prevEmb, currEmb) < DEDUP_THRESHOLD : false
 
     if (!isNearDup || i === lines.length) {
       const runLen = i - runStart
@@ -97,11 +92,7 @@ function deduplicateLines(
   return result
 }
 
-function buildNarrative(
-  anchor: LogEntry,
-  preceding: LogEntry[],
-  anomalyScore: number,
-): string {
+function buildNarrative(anchor: LogEntry, preceding: LogEntry[], anomalyScore: number): string {
   const ts = new Date(anchor.timestamp).toISOString()
   const source = anchor.source || 'unknown source'
   const n = preceding.length

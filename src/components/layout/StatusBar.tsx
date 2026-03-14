@@ -19,9 +19,7 @@ export function StatusBar() {
         {' · '}
         <span>{status}</span>
       </div>
-      <div className={styles.center}>
-        LogiLog
-      </div>
+      <div className={styles.center}>LogiLog</div>
       <div className={styles.right}>
         <span className={styles.accent}>{anomalies.length}</span> anomalies
         {' · '}

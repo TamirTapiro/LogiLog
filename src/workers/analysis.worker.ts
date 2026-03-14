@@ -7,10 +7,7 @@ import { cosineDistance, cosineSimilarity } from '../lib/cosineSimilarity'
 const ANOMALY_WINDOW_SIZE = 50
 const ANOMALY_THRESHOLD = 0.35
 
-function scoreAnomalies(
-  embeddings: Float32Array[],
-  logIds: number[],
-): AnomalyResult[] {
+function scoreAnomalies(embeddings: Float32Array[], logIds: number[]): AnomalyResult[] {
   const anomalies: AnomalyResult[] = []
   const window: Float32Array[] = []
 
@@ -29,7 +26,7 @@ function scoreAnomalies(
     const dim = embedding.length
     const centroid = new Float32Array(dim)
     for (const vec of window) {
-      for (let d = 0; d < dim; d++) centroid[d]! += (vec[d] ?? 0)
+      for (let d = 0; d < dim; d++) centroid[d]! += vec[d] ?? 0
     }
     for (let d = 0; d < dim; d++) centroid[d]! /= window.length
 
@@ -94,7 +91,7 @@ function cluster(
       const c = newAssignments[i]!
       counts[c]!++
       for (let d = 0; d < dim; d++) {
-        newCentroids[c]![d]! += (embeddings[i]![d] ?? 0)
+        newCentroids[c]![d]! += embeddings[i]![d] ?? 0
       }
     }
 
@@ -118,7 +115,10 @@ function cluster(
   const messageMap = new Map<number, string[]>()
   for (let i = 0; i < n; i++) {
     const c = assignments[i]!
-    if (!memberMap.has(c)) { memberMap.set(c, []); messageMap.set(c, []) }
+    if (!memberMap.has(c)) {
+      memberMap.set(c, [])
+      messageMap.set(c, [])
+    }
     memberMap.get(c)!.push(logIds[i]!)
     messageMap.get(c)!.push(messages[i]!)
   }
@@ -192,7 +192,10 @@ function l2Distance(a: Float32Array, b: Float32Array): number {
 function extractLabel(messages: string[]): string {
   const counts = new Map<string, number>()
   for (const msg of messages) {
-    const words = msg.toLowerCase().split(/\W+/).filter((w) => w.length > 2)
+    const words = msg
+      .toLowerCase()
+      .split(/\W+/)
+      .filter((w) => w.length > 2)
     for (let i = 0; i < words.length - 2; i++) {
       const trigram = `${words[i]} ${words[i + 1]} ${words[i + 2]}`
       counts.set(trigram, (counts.get(trigram) ?? 0) + 1)
@@ -202,7 +205,10 @@ function extractLabel(messages: string[]): string {
   let best = ''
   let bestCount = 0
   for (const [trigram, count] of counts) {
-    if (count > bestCount) { best = trigram; bestCount = count }
+    if (count > bestCount) {
+      best = trigram
+      bestCount = count
+    }
   }
   return best || 'Unknown'
 }

@@ -64,7 +64,9 @@
   text-align: left;
   font-family: var(--font-mono);
   border-left: 2px solid transparent;
-  transition: color var(--transition-fast), background var(--transition-fast);
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast);
   white-space: nowrap;
   overflow: hidden;
 }

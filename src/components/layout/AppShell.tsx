@@ -14,9 +14,7 @@ export function AppShell({ children }: AppShellProps) {
   return (
     <div className={`${styles.appShell} ${sidebarOpen ? '' : styles.collapsed}`}>
       <Sidebar />
-      <main className={styles.main}>
-        {children}
-      </main>
+      <main className={styles.main}>{children}</main>
       <StatusBar />
     </div>
   )

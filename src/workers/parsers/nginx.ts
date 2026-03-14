@@ -3,14 +3,22 @@ import type { LogLevel } from '../../types/log.types'
 
 // nginx combined: 127.0.0.1 - - [01/Jan/2024:00:00:00 +0000] "GET / HTTP/1.1" 200 612 "-" "curl/7.68"
 // nginx error:    2024/01/01 00:00:00 [error] 1#0: *1 connect() failed ...
-const ACCESS_RE =
-  /^(\S+)\s+\S+\s+\S+\s+\[([^\]]+)\]\s+"([^"]*?)"\s+(\d{3})\s+\S+/
-const ERROR_RE =
-  /^(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}:\d{2})\s+\[(\w+)\]\s+\d+#\d+:\s*(.*)/
+const ACCESS_RE = /^(\S+)\s+\S+\s+\S+\s+\[([^\]]+)\]\s+"([^"]*?)"\s+(\d{3})\s+\S+/
+const ERROR_RE = /^(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}:\d{2})\s+\[(\w+)\]\s+\d+#\d+:\s*(.*)/
 
 const NGINX_MONTHS: Record<string, number> = {
-  Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
-  Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11,
+  Jan: 0,
+  Feb: 1,
+  Mar: 2,
+  Apr: 3,
+  May: 4,
+  Jun: 5,
+  Jul: 6,
+  Aug: 7,
+  Sep: 8,
+  Oct: 9,
+  Nov: 10,
+  Dec: 11,
 }
 
 function parseNginxAccessDate(raw: string): number {
@@ -21,14 +29,16 @@ function parseNginxAccessDate(raw: string): number {
   const tzH = parseInt((tz ?? '0000').slice(1, 3), 10)
   const tzM = parseInt((tz ?? '0000').slice(3), 10)
   const utcOffset = tzSign * (tzH * 60 + tzM) * 60000
-  return new Date(
-    parseInt(year ?? '2000', 10),
-    NGINX_MONTHS[mon ?? 'Jan'] ?? 0,
-    parseInt(day ?? '1', 10),
-    parseInt(hh ?? '0', 10),
-    parseInt(mm ?? '0', 10),
-    parseInt(ss ?? '0', 10),
-  ).getTime() - utcOffset
+  return (
+    new Date(
+      parseInt(year ?? '2000', 10),
+      NGINX_MONTHS[mon ?? 'Jan'] ?? 0,
+      parseInt(day ?? '1', 10),
+      parseInt(hh ?? '0', 10),
+      parseInt(mm ?? '0', 10),
+      parseInt(ss ?? '0', 10),
+    ).getTime() - utcOffset
+  )
 }
 
 function statusToLevel(status: number): LogLevel {

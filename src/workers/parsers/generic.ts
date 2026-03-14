@@ -5,7 +5,8 @@ import { normalizeLevel } from '../../lib/logParser'
 const ISO_RE = /(\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:?\d{2})?)/
 // Epoch ms/s: 10+ digits (ms) or exactly 10 digits (s)
 const EPOCH_RE = /\b(1[0-9]{12})\b|\b(1[0-9]{9})\b/
-const LEVEL_RE = /\b(TRACE|DEBUG|INFO|INFORMATION|WARN|WARNING|ERROR|ERR|FATAL|CRIT|CRITICAL|EMERG|ALERT)\b/i
+const LEVEL_RE =
+  /\b(TRACE|DEBUG|INFO|INFORMATION|WARN|WARNING|ERROR|ERR|FATAL|CRIT|CRITICAL|EMERG|ALERT)\b/i
 
 export const GenericTimestampParser: LogParser = {
   name: 'generic',
@@ -32,7 +33,9 @@ export const GenericTimestampParser: LogParser = {
     } else {
       const epochMatch = EPOCH_RE.exec(line)
       if (epochMatch) {
-        const ms = epochMatch[1] ? parseInt(epochMatch[1], 10) : parseInt(epochMatch[2] ?? '0', 10) * 1000
+        const ms = epochMatch[1]
+          ? parseInt(epochMatch[1], 10)
+          : parseInt(epochMatch[2] ?? '0', 10) * 1000
         if (ms > 0) timestamp = ms
       }
     }
@@ -52,7 +55,10 @@ export const GenericTimestampParser: LogParser = {
     // Message: everything after the level keyword
     let message = line
     if (levelMatch) {
-      message = line.slice(levelMatch.index + levelMatch[0].length).replace(/^[\s:]+/, '').trim()
+      message = line
+        .slice(levelMatch.index + levelMatch[0].length)
+        .replace(/^[\s:]+/, '')
+        .trim()
       if (!message) message = line
     }
 

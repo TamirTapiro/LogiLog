@@ -14,7 +14,9 @@ export const K8sParser: LogParser = {
   name: 'k8s',
 
   detect(sampleLines) {
-    return sampleLines.some((l) => K8S_TEXT_RE.test(l) || (l.startsWith('{') && K8S_JSON_RE.test(l)))
+    return sampleLines.some(
+      (l) => K8S_TEXT_RE.test(l) || (l.startsWith('{') && K8S_JSON_RE.test(l)),
+    )
   },
 
   confidence(sampleLines) {

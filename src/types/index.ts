@@ -1,10 +1,5 @@
 export type { LogLevel, LogEntry, ParsedBatch } from './log.types'
-export type {
-  EmbeddingVector,
-  AnomalyResult,
-  ClusterResult,
-  SmartContext,
-} from './analysis.types'
+export type { EmbeddingVector, AnomalyResult, ClusterResult, SmartContext } from './analysis.types'
 export type {
   IngestionState,
   LogsState,

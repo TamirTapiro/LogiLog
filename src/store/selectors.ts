@@ -24,10 +24,7 @@ export interface TimelineBucket {
   anomalyCount: number
 }
 
-export const selectTimelineBuckets = (
-  state: StoreState,
-  bucketCount = 100,
-): TimelineBucket[] => {
+export const selectTimelineBuckets = (state: StoreState, bucketCount = 100): TimelineBucket[] => {
   const entries = state.logs.entries
   if (entries.length === 0) return []
 

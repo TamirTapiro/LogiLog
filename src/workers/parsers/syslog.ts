@@ -5,12 +5,21 @@ import { normalizeLevel } from '../../lib/logParser'
 // RFC 5424: <PRI>VERSION TIMESTAMP HOSTNAME APP-NAME PROCID MSGID STRUCTURED-DATA MSG
 const RFC3164_RE =
   /^([A-Z][a-z]{2}\s+\d{1,2}\s+\d{2}:\d{2}:\d{2})\s+(\S+)\s+(\S+?)(?:\[(\d+)\])?:\s*(.*)$/
-const RFC5424_RE =
-  /^<(\d+)>(\d+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(?:-|\[.*?\])\s*(.*)$/
+const RFC5424_RE = /^<(\d+)>(\d+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(?:-|\[.*?\])\s*(.*)$/
 
 const MONTHS: Record<string, number> = {
-  Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
-  Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11,
+  Jan: 0,
+  Feb: 1,
+  Mar: 2,
+  Apr: 3,
+  May: 4,
+  Jun: 5,
+  Jul: 6,
+  Aug: 7,
+  Sep: 8,
+  Oct: 9,
+  Nov: 10,
+  Dec: 11,
 }
 
 function parseSyslogDate(dateStr: string): number {
@@ -42,9 +51,10 @@ export const SyslogParser: LogParser = {
       const [, dateStr, host, app, , msg] = m3164
       return {
         timestamp: parseSyslogDate(dateStr ?? ''),
-        level: normalizeLevel(msg?.split(':')[0] ?? '') === 'UNKNOWN'
-          ? detectLevelFromMsg(msg ?? '')
-          : normalizeLevel(msg?.split(':')[0] ?? ''),
+        level:
+          normalizeLevel(msg?.split(':')[0] ?? '') === 'UNKNOWN'
+            ? detectLevelFromMsg(msg ?? '')
+            : normalizeLevel(msg?.split(':')[0] ?? ''),
         source: `${host ?? 'unknown'}/${app ?? 'unknown'}`,
         message: (msg ?? '').trim(),
         raw: line,
@@ -78,6 +88,7 @@ function severityToLevel(s: number) {
 
 function detectLevelFromMsg(msg: string) {
   return normalizeLevel(
-    /\b(trace|debug|info|warn|warning|error|err|fatal|crit|critical)\b/i.exec(msg)?.[1] ?? 'unknown'
+    /\b(trace|debug|info|warn|warning|error|err|fatal|crit|critical)\b/i.exec(msg)?.[1] ??
+      'unknown',
   )
 }

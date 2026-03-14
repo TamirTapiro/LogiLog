@@ -40,9 +40,7 @@ export function Sidebar() {
       </nav>
 
       <div className={styles.modelStatus}>
-        <span
-          className={`${styles.statusDot} ${modelReady ? styles.ready : ''}`}
-        />
+        <span className={`${styles.statusDot} ${modelReady ? styles.ready : ''}`} />
         {modelLoading && <Spinner />}
         <span className={styles.modelStatusText}>
           {modelReady ? (

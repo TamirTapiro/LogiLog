@@ -18,6 +18,7 @@ export function normalizeLevel(raw: string): LogLevel {
   if (up === 'INFO' || up === 'INFORMATION') return 'INFO'
   if (up === 'WARN' || up === 'WARNING') return 'WARN'
   if (up === 'ERROR' || up === 'ERR') return 'ERROR'
-  if (up === 'FATAL' || up === 'CRIT' || up === 'CRITICAL' || up === 'EMERG' || up === 'ALERT') return 'FATAL'
+  if (up === 'FATAL' || up === 'CRIT' || up === 'CRITICAL' || up === 'EMERG' || up === 'ALERT')
+    return 'FATAL'
   return 'UNKNOWN'
 }
