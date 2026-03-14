@@ -8,6 +8,7 @@ import { LogViewer } from './components/logs/LogViewer'
 import { ClusteringView } from './components/clustering/ClusteringView'
 import { AnomalyList } from './components/anomaly/AnomalyList'
 import { useKeyboardNavigation } from './hooks/useKeyboardNavigation'
+import { useAnalysisPipeline } from './hooks/useAnalysisPipeline'
 import useStore from './store'
 
 function PanelContent() {
@@ -27,6 +28,7 @@ function PanelContent() {
 
 function App() {
   const { showShortcuts, setShowShortcuts } = useKeyboardNavigation()
+  useAnalysisPipeline()
   const ingestionStatus = useStore((s) => s.ingestion.status)
   const ingestionError = useStore((s) => s.ingestion.error)
   const ingestionProgress = useStore((s) => s.ingestion.progress)
