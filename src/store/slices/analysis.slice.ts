@@ -9,7 +9,10 @@ export interface AnalysisSlice {
   addSmartContext: (logId: number, context: SmartContext) => void
   resetAnalysis: () => void
   setAnalysisStatus: (status: AnalysisState['analysisStatus']) => void
-  setAiForensics: (result: AiForensicsResult | null, status: AnalysisState['aiForensicsStatus']) => void
+  setAiForensics: (
+    result: AiForensicsResult | null,
+    status: AnalysisState['aiForensicsStatus'],
+  ) => void
 }
 
 const initialAnalysisState: AnalysisState = {
