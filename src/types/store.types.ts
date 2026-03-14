@@ -36,6 +36,7 @@ export interface UiState {
   activePanel: ActivePanel
   searchQuery: string
   sidebarOpen: boolean
+  focusedRowIndex: number
 }
 
 // Combined app state

@@ -7,6 +7,7 @@ export interface UiSlice {
   setActivePanel: (panel: ActivePanel) => void
   setSearchQuery: (query: string) => void
   toggleSidebar: () => void
+  setFocusedRowIndex: (index: number) => void
 }
 
 const initialUiState: UiState = {
@@ -14,6 +15,7 @@ const initialUiState: UiState = {
   activePanel: 'logs',
   searchQuery: '',
   sidebarOpen: true,
+  focusedRowIndex: 0,
 }
 
 export const createUiSlice: StateCreator<UiSlice> = (set) => ({
@@ -48,6 +50,14 @@ export const createUiSlice: StateCreator<UiSlice> = (set) => ({
       ui: {
         ...state.ui,
         sidebarOpen: !state.ui.sidebarOpen,
+      },
+    })),
+
+  setFocusedRowIndex: (index) =>
+    set((state) => ({
+      ui: {
+        ...state.ui,
+        focusedRowIndex: index,
       },
     })),
 })

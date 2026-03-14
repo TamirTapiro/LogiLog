@@ -1,5 +1,7 @@
 import { AppShell } from './components/layout/AppShell'
 import { ErrorBoundary } from './components/shared/ErrorBoundary'
+import { KeyboardShortcutsModal } from './components/shared/KeyboardShortcutsModal'
+import { useKeyboardNavigation } from './hooks/useKeyboardNavigation'
 import useStore from './store'
 import type { ActivePanel } from './types/store.types'
 
@@ -31,6 +33,7 @@ function PanelContent() {
 }
 
 function App() {
+  const { showShortcuts, setShowShortcuts } = useKeyboardNavigation()
   const ingestionStatus = useStore((s) => s.ingestion.status)
   const ingestionError = useStore((s) => s.ingestion.error)
   const ingestionProgress = useStore((s) => s.ingestion.progress)
@@ -70,6 +73,7 @@ function App() {
       <AppShell>
         <PanelContent />
       </AppShell>
+      <KeyboardShortcutsModal open={showShortcuts} onClose={() => setShowShortcuts(false)} />
     </ErrorBoundary>
   )
 }

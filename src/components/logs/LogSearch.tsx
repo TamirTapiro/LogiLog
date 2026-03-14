@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useState } from 'react'
 import useStore from '../../store'
 import styles from './LogSearch.module.css'
 
@@ -8,19 +8,6 @@ export function LogSearch() {
   const inputRef = useRef<HTMLInputElement>(null)
   const [regexMode, setRegexMode] = useState(false)
   const [filterMode, setFilterMode] = useState<'filter' | 'highlight'>('filter')
-
-  useEffect(() => {
-    function onKeyDown(e: KeyboardEvent) {
-      const tag = (document.activeElement as HTMLElement)?.tagName
-      if (tag === 'INPUT' || tag === 'TEXTAREA') return
-      if (e.key === '/') {
-        e.preventDefault()
-        inputRef.current?.focus()
-      }
-    }
-    window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
-  }, [])
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === 'Escape') {
@@ -41,6 +28,7 @@ export function LogSearch() {
     <div className={styles.container}>
       <input
         ref={inputRef}
+        id="log-search-input"
         className={styles.input}
         type="text"
         placeholder={regexMode ? '/pattern/flags' : 'Search logs… (/ to focus)'}
