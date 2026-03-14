@@ -91,7 +91,7 @@ async function decompressZip(
     entries[name].byteLength > entries[best].byteLength ? name : best,
   )
 
-  return new Blob([entries[largest]])
+  return new Blob([entries[largest] as BlobPart])
 }
 
 const worker: ParseWorkerAPI = {
