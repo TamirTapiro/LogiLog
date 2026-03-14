@@ -1,0 +1,21 @@
+.appShell {
+  display: grid;
+  grid-template-columns: var(--sidebar-width, 240px) 1fr;
+  grid-template-rows: 1fr 24px;
+  height: 100vh;
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-mono);
+  overflow: hidden;
+}
+
+.appShell.collapsed {
+  --sidebar-width: 48px;
+}
+
+.main {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-primary);
+}

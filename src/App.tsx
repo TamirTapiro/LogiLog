@@ -1,4 +1,7 @@
 import { Component, ErrorInfo, ReactNode } from 'react'
+import { AppShell } from './components/layout/AppShell'
+import useStore from './store'
+import type { ActivePanel } from './types/store.types'
 
 interface ErrorBoundaryProps {
   children: ReactNode
@@ -36,13 +39,39 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 }
 
+const PANEL_LABELS: Record<ActivePanel, string> = {
+  timeline: 'Timeline',
+  logs: 'Log Viewer',
+  clusters: 'Clusters',
+  anomalies: 'Anomalies',
+}
+
+function PanelContent() {
+  const activePanel = useStore((s) => s.ui.activePanel)
+  const label = PANEL_LABELS[activePanel]
+
+  return (
+    <div
+      style={{
+        flex: 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: 'var(--color-text-muted)',
+        fontSize: 'var(--font-size-sm)',
+      }}
+    >
+      {label}
+    </div>
+  )
+}
+
 function App() {
   return (
     <ErrorBoundary>
-      <main>
-        <h1>LogiLog</h1>
-        <p>Browser-native semantic log analysis engine</p>
-      </main>
+      <AppShell>
+        <PanelContent />
+      </AppShell>
     </ErrorBoundary>
   )
 }
