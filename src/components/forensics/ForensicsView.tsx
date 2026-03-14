@@ -59,7 +59,11 @@ export function ForensicsView() {
 
   const anomalyIds = useMemo(() => new Set(anomalies.map((a) => a.logId)), [anomalies])
 
-  if (analysisStatus === 'idle' || analysisStatus === 'embedding' || analysisStatus === 'analyzing') {
+  if (
+    analysisStatus === 'idle' ||
+    analysisStatus === 'embedding' ||
+    analysisStatus === 'analyzing'
+  ) {
     return (
       <div className={styles.empty}>
         {analysisStatus === 'idle'
@@ -90,7 +94,9 @@ export function ForensicsView() {
                   key={cluster.clusterId}
                   className={`${styles.clusterRow} ${sev === 'anomalous' ? styles.anomalousRow : ''}`}
                 >
-                  <span className={`${styles.marker} ${sev === 'anomalous' ? styles.markerAlert : styles.markerNormal}`}>
+                  <span
+                    className={`${styles.marker} ${sev === 'anomalous' ? styles.markerAlert : styles.markerNormal}`}
+                  >
                     {sev === 'anomalous' ? '[!]' : '[+]'}
                   </span>
                   <span className={styles.clusterLabel}>{cluster.label}</span>
@@ -109,16 +115,23 @@ export function ForensicsView() {
             <div className={styles.sectionTitle}>CONTEXT WINDOW</div>
             <div className={styles.logBlock}>
               {topContext?.precedingLines.slice(-8).map((log) => (
-                <div key={log.id} className={`${styles.logLine} ${styles[`level${log.level}`] ?? ''}`}>
+                <div
+                  key={log.id}
+                  className={`${styles.logLine} ${styles[`level${log.level}`] ?? ''}`}
+                >
                   <span className={styles.logTs}>{formatTs(log.timestamp)}</span>
-                  <span className={`${styles.logLevel} ${styles[`level${log.level}`] ?? ''}`}>{log.level}</span>
+                  <span className={`${styles.logLevel} ${styles[`level${log.level}`] ?? ''}`}>
+                    {log.level}
+                  </span>
                   <span className={styles.logMsg}>{log.message}</span>
                 </div>
               ))}
               {topLog && (
                 <div className={styles.anchorLine}>
                   <span className={styles.logTs}>{formatTs(topLog.timestamp)}</span>
-                  <span className={`${styles.logLevel} ${styles[`level${topLog.level}`] ?? ''}`}>{topLog.level}</span>
+                  <span className={`${styles.logLevel} ${styles[`level${topLog.level}`] ?? ''}`}>
+                    {topLog.level}
+                  </span>
                   <span className={styles.logMsg}>{topLog.message}</span>
                   <span className={styles.anchorTag}>▶ TOP ANOMALY</span>
                 </div>
@@ -165,7 +178,9 @@ export function ForensicsView() {
               {topContext && (
                 <div className={styles.metricRow}>
                   <span className={styles.metricLabel}>Related Logs</span>
-                  <span className={styles.metricValue}>{topContext.relatedLogIds.length} entries</span>
+                  <span className={styles.metricValue}>
+                    {topContext.relatedLogIds.length} entries
+                  </span>
                 </div>
               )}
             </div>
