@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { AppShell } from './components/layout/AppShell'
 import { ErrorBoundary } from './components/shared/ErrorBoundary'
 import { KeyboardShortcutsModal } from './components/shared/KeyboardShortcutsModal'
+import { FileDropZone } from './components/ingestion/FileDropZone'
 import { useKeyboardNavigation } from './hooks/useKeyboardNavigation'
 import useStore from './store'
 import type { ActivePanel } from './types/store.types'
@@ -15,7 +16,12 @@ const PANEL_LABELS: Record<ActivePanel, string> = {
 
 function PanelContent() {
   const activePanel = useStore((s) => s.ui.activePanel)
+  const ingestionStatus = useStore((s) => s.ingestion.status)
   const label = PANEL_LABELS[activePanel]
+
+  if (ingestionStatus === 'idle') {
+    return <FileDropZone />
+  }
 
   return (
     <div
@@ -48,6 +54,16 @@ function App() {
       document.title = 'LogiLog'
     }
   }, [fileName])
+
+  useEffect(() => {
+    const prevent = (e: DragEvent) => e.preventDefault()
+    document.addEventListener('dragover', prevent)
+    document.addEventListener('drop', prevent)
+    return () => {
+      document.removeEventListener('dragover', prevent)
+      document.removeEventListener('drop', prevent)
+    }
+  }, [])
 
   let statusMessage = ''
   if (ingestionStatus === 'error') {

@@ -12,7 +12,7 @@ export interface UiSlice {
 
 const initialUiState: UiState = {
   selectedLogId: null,
-  activePanel: 'logs',
+  activePanel: 'timeline',
   searchQuery: '',
   sidebarOpen: true,
   focusedRowIndex: 0,
