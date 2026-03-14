@@ -10,5 +10,12 @@ export default defineConfig({
     globals: true,
     setupFiles: [],
     passWithNoTests: true,
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'lcov'],
+      thresholds: { lines: 90 },
+      include: ['src/lib/**'],
+      exclude: ['src/lib/**/*.test.ts'],
+    },
   },
 })

@@ -34,3 +34,10 @@ playwright-report/
 
 # TypeScript
 *.tsbuildinfo
+
+# Alternate lock files (npm is canonical)
+pnpm-lock.yaml
+yarn.lock
+
+# Scratch / temp files
+example.txt
