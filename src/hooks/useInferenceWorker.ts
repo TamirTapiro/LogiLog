@@ -1,6 +1,6 @@
 import { useRef, useCallback, useSyncExternalStore } from 'react'
 import * as Comlink from 'comlink'
-import type { InferenceWorker } from '../workers/inference.worker'
+import type { InferenceWorker, WorkerProgressEvent } from '../workers/inference.worker'
 import useStore from '../store'
 
 interface InferenceWorkerState {
@@ -64,10 +64,8 @@ export function useInferenceWorker() {
         const api = getOrCreateWorker()
         const embeddings = await api.embed(
           messages,
-          Comlink.proxy((event) => {
-            if (event.type === 'embed-progress') {
-              // progress update — could update store if needed
-            }
+          Comlink.proxy((_event: WorkerProgressEvent) => {
+            // progress update — could update store if needed
           }),
         )
         setState({ isRunning: false })
