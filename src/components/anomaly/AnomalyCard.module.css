@@ -1,0 +1,132 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.card:hover {
+  background: var(--color-bg-tertiary);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.rank {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  min-width: 2.5rem;
+}
+
+.meta {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.source {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-accent-blue);
+  truncate: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.timestamp {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.actions {
+  flex-shrink: 0;
+  display: flex;
+  gap: var(--space-2);
+}
+
+.btn {
+  padding: 2px var(--space-2);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition:
+    color var(--transition-normal),
+    border-color var(--transition-normal);
+}
+
+.btn:hover {
+  color: var(--color-text-primary);
+  border-color: var(--color-text-secondary);
+}
+
+.meterWrapper {
+  position: relative;
+  height: 6px;
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-sm);
+  overflow: visible;
+}
+
+.meterFill {
+  height: 100%;
+  border-radius: var(--radius-sm);
+  transition: width var(--transition-normal);
+}
+
+.meterFillRed {
+  background: var(--color-accent-red);
+}
+
+.meterFillAmber {
+  background: var(--color-accent-amber);
+}
+
+.meterFillGreen {
+  background: var(--color-accent-green);
+}
+
+.thresholdMarker {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 1px;
+  background: var(--color-text-muted);
+  left: 35%;
+  pointer-events: none;
+}
+
+.message {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+}
+
+.scoreLabel {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-align: right;
+}
