@@ -26,7 +26,10 @@ export interface InferenceWorkerAPI {
   initialize(
     onProgress: (event: WorkerProgressEvent) => void,
   ): Promise<{ device: string; modelId: string; dtype: string }>
-  embed(texts: string[]): Promise<Float32Array[]>
+  embed(
+    texts: string[],
+    onProgress?: (event: WorkerProgressEvent) => void,
+  ): Promise<Float32Array[]>
   isReady(): boolean
 }
 
@@ -117,9 +120,12 @@ const inferenceWorker: InferenceWorkerAPI = {
     return { device: _device, modelId: _modelId, dtype: _dtype }
   },
 
-  async embed(texts) {
+  async embed(texts, onProgress) {
     if (!_pipe) throw new Error('Inference worker not initialized')
-    return embedTexts(_pipe, texts, undefined)
+    return embedTexts(_pipe, texts, onProgress
+      ? (embedded, total) => onProgress({ type: 'embed-progress', embedded, total })
+      : undefined,
+    )
   },
 }
 
