@@ -18,10 +18,10 @@ export const markdownFormatter: Formatter = (
   if (filePath) lines.push(`**File:** \`${filePath}\``)
   lines.push(
     `**Found:** ${report.summary.totalAnomalies} anomalies in ` +
-    `${report.summary.totalClusters} clusters | ` +
-    `**Duration:** ${durationSec}s | ` +
-    `**Lines:** ${report.meta.inputLines} | ` +
-    `**Parser:** ${report.meta.parserUsed}`,
+      `${report.summary.totalClusters} clusters | ` +
+      `**Duration:** ${durationSec}s | ` +
+      `**Lines:** ${report.meta.inputLines} | ` +
+      `**Parser:** ${report.meta.parserUsed}`,
   )
   lines.push('')
 

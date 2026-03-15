@@ -45,9 +45,12 @@ interface SarifLog {
 function levelToSarif(level: string): string {
   switch (level) {
     case 'FATAL':
-    case 'ERROR': return 'error'
-    case 'WARN':  return 'warning'
-    default:      return 'note'
+    case 'ERROR':
+      return 'error'
+    case 'WARN':
+      return 'warning'
+    default:
+      return 'note'
   }
 }
 
@@ -82,7 +85,8 @@ export const sarifFormatter: Formatter = (
 
   const sarif: SarifLog = {
     version: '2.1.0',
-    $schema: 'https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json',
+    $schema:
+      'https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json',
     runs: [
       {
         tool: {

@@ -14,13 +14,20 @@ function scoreBar(score: number, width = 20): string {
 
 function levelColor(level: string): string {
   switch (level) {
-    case 'FATAL': return chalk.bgRed.white.bold(level)
-    case 'ERROR': return chalk.red.bold(level)
-    case 'WARN':  return chalk.yellow(level)
-    case 'INFO':  return chalk.green(level)
-    case 'DEBUG': return chalk.cyan(level)
-    case 'TRACE': return chalk.gray(level)
-    default:      return chalk.white(level)
+    case 'FATAL':
+      return chalk.bgRed.white.bold(level)
+    case 'ERROR':
+      return chalk.red.bold(level)
+    case 'WARN':
+      return chalk.yellow(level)
+    case 'INFO':
+      return chalk.green(level)
+    case 'DEBUG':
+      return chalk.cyan(level)
+    case 'TRACE':
+      return chalk.gray(level)
+    default:
+      return chalk.white(level)
   }
 }
 
@@ -38,21 +45,26 @@ export const terminalFormatter: Formatter = (
   // ── Header ──
   const durationSec = (report.meta.durationMs / 1000).toFixed(1)
   lines.push(chalk.bold.cyan('┌─────────────────────────────────────────────────────────┐'))
-  lines.push(chalk.bold.cyan('│') + chalk.bold.white('  LogiLog Forensic Report') + chalk.bold.cyan('                                │'))
+  lines.push(
+    chalk.bold.cyan('│') +
+      chalk.bold.white('  LogiLog Forensic Report') +
+      chalk.bold.cyan('                                │'),
+  )
   lines.push(chalk.bold.cyan('├─────────────────────────────────────────────────────────┤'))
   lines.push(
     chalk.bold.cyan('│') +
-    `  ${chalk.yellow('Found')} ${chalk.bold(String(report.summary.totalAnomalies))} anomalies` +
-    ` in ${chalk.bold(String(report.summary.totalClusters))} clusters` +
-    chalk.bold.cyan('  │'),
+      `  ${chalk.yellow('Found')} ${chalk.bold(String(report.summary.totalAnomalies))} anomalies` +
+      ` in ${chalk.bold(String(report.summary.totalClusters))} clusters` +
+      chalk.bold.cyan('  │'),
   )
   if (filePath) {
     lines.push(chalk.bold.cyan('│') + `  ${chalk.gray('File:')} ${chalk.white(filePath)}`)
   }
   lines.push(
-    chalk.bold.cyan('│') + `  ${chalk.gray('Duration:')} ${durationSec}s  |  ` +
-    `${chalk.gray('Lines:')} ${report.meta.inputLines}  |  ` +
-    `${chalk.gray('Parser:')} ${report.meta.parserUsed}`,
+    chalk.bold.cyan('│') +
+      `  ${chalk.gray('Duration:')} ${durationSec}s  |  ` +
+      `${chalk.gray('Lines:')} ${report.meta.inputLines}  |  ` +
+      `${chalk.gray('Parser:')} ${report.meta.parserUsed}`,
   )
   lines.push(chalk.bold.cyan('└─────────────────────────────────────────────────────────┘'))
   lines.push('')
@@ -77,16 +89,12 @@ export const terminalFormatter: Formatter = (
     lines.push(chalk.gray('─'.repeat(60)))
 
     const maxLabel = Math.max(...report.clusters.map((c) => c.label.length), 5)
-    lines.push(
-      chalk.gray(
-        'ID'.padEnd(5) + 'Label'.padEnd(maxLabel + 2) + 'Size',
-      ),
-    )
+    lines.push(chalk.gray('ID'.padEnd(5) + 'Label'.padEnd(maxLabel + 2) + 'Size'))
     for (const cluster of report.clusters.slice(0, 10)) {
       lines.push(
         chalk.white(String(cluster.id).padEnd(5)) +
-        chalk.cyan(cluster.label.padEnd(maxLabel + 2)) +
-        chalk.yellow(String(cluster.size)),
+          chalk.cyan(cluster.label.padEnd(maxLabel + 2)) +
+          chalk.yellow(String(cluster.size)),
       )
     }
     if (report.clusters.length > 10) {
@@ -101,17 +109,20 @@ function formatAnomaly(anomaly: Anomaly, lines: string[], verbose: boolean): voi
   lines.push('')
   lines.push(
     chalk.bold.red(`#${anomaly.rank}`) +
-    '  ' +
-    scoreBar(anomaly.score) +
-    '  ' +
-    chalk.yellow(anomaly.score.toFixed(4)) +
-    '  ' +
-    chalk.gray(`line ${anomaly.line}`),
+      '  ' +
+      scoreBar(anomaly.score) +
+      '  ' +
+      chalk.yellow(anomaly.score.toFixed(4)) +
+      '  ' +
+      chalk.gray(`line ${anomaly.line}`),
   )
   lines.push(
-    '   ' + levelColor(anomaly.level) + '  ' +
-    chalk.gray(anomaly.source) + '  ' +
-    chalk.white(truncate(anomaly.message, MAX_MSG_LEN)),
+    '   ' +
+      levelColor(anomaly.level) +
+      '  ' +
+      chalk.gray(anomaly.source) +
+      '  ' +
+      chalk.white(truncate(anomaly.message, MAX_MSG_LEN)),
   )
 
   // Context narrative
@@ -129,8 +140,9 @@ function formatAnomaly(anomaly: Anomaly, lines: string[], verbose: boolean): voi
       const entry = preceding[i]!
       lines.push(
         chalk.gray(prefix) +
-        levelColor(entry.level) + '  ' +
-        chalk.gray(truncate(entry.message, 80)),
+          levelColor(entry.level) +
+          '  ' +
+          chalk.gray(truncate(entry.message, 80)),
       )
     }
   }

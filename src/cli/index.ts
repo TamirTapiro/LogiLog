@@ -30,7 +30,9 @@ const program = new Command()
 
 program
   .name('logilog')
-  .description('Semantic log forensics: detect anomalies, cluster events, and generate AI narratives from any log file.')
+  .description(
+    'Semantic log forensics: detect anomalies, cluster events, and generate AI narratives from any log file.',
+  )
   .version(pkgVersion)
 
 // ---- analyze subcommand ----
@@ -44,7 +46,11 @@ program
   .option('--threshold <n>', 'Anomaly threshold 0–1', parseFloat0to1, 0.35)
   .option('--context-window <n>', 'Lines of context before anomaly', parsePositiveInt, 75)
   .option('--ai', 'Enable AI forensics (requires ANTHROPIC_API_KEY env var)')
-  .option('--cache-dir <path>', 'Model cache directory', path.join(os.homedir(), '.cache', 'logilog'))
+  .option(
+    '--cache-dir <path>',
+    'Model cache directory',
+    path.join(os.homedir(), '.cache', 'logilog'),
+  )
   .option('--no-cache', 'Skip cache, force re-download')
   .option('--parser <name>', 'Force parser: json, syslog, k8s, apache, nginx, generic')
   .option('--quiet', 'Suppress progress spinner')
@@ -67,20 +73,32 @@ program
     // Validate format
     const validFormats = ['terminal', 'json', 'markdown', 'sarif']
     if (!validFormats.includes(format)) {
-      process.stderr.write(`Error: Invalid format "${format}". Valid options: ${validFormats.join(', ')}\n`)
-      process.stderr.write(`Usage: logilog analyze <file> --format <terminal|json|markdown|sarif>\n`)
+      process.stderr.write(
+        `Error: Invalid format "${format}". Valid options: ${validFormats.join(', ')}\n`,
+      )
+      process.stderr.write(
+        `Usage: logilog analyze <file> --format <terminal|json|markdown|sarif>\n`,
+      )
       process.exit(2)
     }
 
     // Validate AI key if --ai flag used
     const anthropicApiKey = aiEnabled ? process.env['ANTHROPIC_API_KEY'] : undefined
     if (aiEnabled && !anthropicApiKey) {
-      process.stderr.write('Error: ANTHROPIC_API_KEY environment variable is required when using --ai\n')
+      process.stderr.write(
+        'Error: ANTHROPIC_API_KEY environment variable is required when using --ai\n',
+      )
       process.exit(1)
     }
 
     // Set up spinner (only for non-JSON formats, goes to stderr)
-    let spinner: { start(): void; text: string; succeed(text?: string): void; fail(text?: string): void; stop(): void } | null = null
+    let spinner: {
+      start(): void
+      text: string
+      succeed(text?: string): void
+      fail(text?: string): void
+      stop(): void
+    } | null = null
     if (!quiet && format !== 'json') {
       try {
         const { default: ora } = await import('ora')
@@ -149,7 +167,11 @@ program
 program
   .command('download-model')
   .description('Pre-cache the embedding model (useful for Docker/CI setup)')
-  .option('--cache-dir <path>', 'Model cache directory', path.join(os.homedir(), '.cache', 'logilog'))
+  .option(
+    '--cache-dir <path>',
+    'Model cache directory',
+    path.join(os.homedir(), '.cache', 'logilog'),
+  )
   .action(async (opts: { cacheDir: string }) => {
     const { cacheDir } = opts
 
@@ -184,6 +206,7 @@ function parsePositiveInt(value: string): number {
 
 function parseFloat0to1(value: string): number {
   const n = parseFloat(value)
-  if (isNaN(n) || n < 0 || n > 1) throw new InvalidArgumentError('Must be a number between 0 and 1.')
+  if (isNaN(n) || n < 0 || n > 1)
+    throw new InvalidArgumentError('Must be a number between 0 and 1.')
   return n
 }
