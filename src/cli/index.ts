@@ -11,10 +11,7 @@ import { Command, InvalidArgumentError } from 'commander'
 import * as path from 'path'
 import * as fs from 'fs'
 import * as os from 'os'
-import { createRequire } from 'module'
-
 // Resolve package version
-const _require = createRequire(import.meta.url)
 let pkgVersion = '0.0.1'
 try {
   // Look up from our own package.json
