@@ -156,12 +156,12 @@ npm run format
 
 ### Naming Conventions
 
-| Entity | Convention | Example |
-|--------|-----------|---------|
-| React components | PascalCase | `AnomalyPanel` |
-| Functions / variables | camelCase | `detectAnomalies` |
-| Constants | UPPER_SNAKE_CASE | `MAX_CLUSTERS` |
-| File names | kebab-case | `anomaly-panel.tsx` |
+| Entity                | Convention       | Example             |
+| --------------------- | ---------------- | ------------------- |
+| React components      | PascalCase       | `AnomalyPanel`      |
+| Functions / variables | camelCase        | `detectAnomalies`   |
+| Constants             | UPPER_SNAKE_CASE | `MAX_CLUSTERS`      |
+| File names            | kebab-case       | `anomaly-panel.tsx` |
 
 ### Performance
 
@@ -187,16 +187,16 @@ footer (optional — e.g. Closes #123)
 
 ### Types
 
-| Type | When to use |
-|------|------------|
-| `feat` | New feature |
-| `fix` | Bug fix |
-| `docs` | Documentation only |
-| `style` | Formatting, no logic change |
+| Type       | When to use                           |
+| ---------- | ------------------------------------- |
+| `feat`     | New feature                           |
+| `fix`      | Bug fix                               |
+| `docs`     | Documentation only                    |
+| `style`    | Formatting, no logic change           |
 | `refactor` | Restructuring without behavior change |
-| `perf` | Performance improvement |
-| `test` | Adding or updating tests |
-| `chore` | Build process, dependency updates, CI |
+| `perf`     | Performance improvement               |
+| `test`     | Adding or updating tests              |
+| `chore`    | Build process, dependency updates, CI |
 
 ### Scope (optional but recommended)
 
