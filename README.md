@@ -130,10 +130,7 @@ import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
   test: {
-    reporters: [
-      'default',
-      ['logilog/vitest', { logFiles: ['./logs/test-server.log'] }],
-    ],
+    reporters: ['default', ['logilog/vitest', { logFiles: ['./logs/test-server.log'] }]],
   },
 })
 ```
@@ -143,10 +140,7 @@ export default defineConfig({
 ```js
 // jest.config.js
 module.exports = {
-  reporters: [
-    'default',
-    ['logilog/jest', { logFiles: ['./logs/test-server.log'] }],
-  ],
+  reporters: ['default', ['logilog/jest', { logFiles: ['./logs/test-server.log'] }]],
 }
 ```
 
