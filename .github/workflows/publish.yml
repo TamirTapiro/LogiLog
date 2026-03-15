@@ -1,0 +1,109 @@
+name: Publish to npm
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  # ── Test job: unit tests on matrix of Node versions + OS ──
+  test:
+    name: Test (${{ matrix.os }}, Node ${{ matrix.node }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        node: [18, 20, 22]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Cache the embedding model so integration tests don't re-download
+      - name: Cache LogiLog model
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/logilog
+          key: logilog-model-v1-${{ runner.os }}
+          restore-keys: |
+            logilog-model-v1-
+
+      - name: Run unit tests
+        run: npm run test
+
+      - name: Run Node.js integration tests
+        run: npm run test:node
+        env:
+          # Skip model download in CI by relying on cache
+          LOGILOG_CACHE_DIR: ~/.cache/logilog
+
+  # ── Build job: compile with tsup and upload dist/ artifact ──
+  build:
+    name: Build (tsup)
+    runs-on: ubuntu-latest
+    needs: []  # runs in parallel with test
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build package
+        run: npm run build:pkg
+
+      - name: Verify pack contents
+        run: |
+          npm pack --dry-run 2>&1 | tee pack-contents.txt
+          # Fail if src/ files are included
+          grep -v "^npm notice" pack-contents.txt | grep "src/" && exit 1 || true
+
+      - name: Upload dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 1
+
+  # ── Publish job: downloads artifact and publishes to npm ──
+  publish:
+    name: Publish to npm
+    runs-on: ubuntu-latest
+    needs: [test, build]
+    permissions:
+      id-token: write  # For npm provenance
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download dist artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Publish to npm
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}

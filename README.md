@@ -103,7 +103,70 @@ Browser Tab
 
 ## Getting Started
 
-### Try it
+### Install as npm package
+
+```bash
+npm install logilog
+# or for CLI usage without installing:
+npx logilog analyze server.log
+```
+
+### Programmatic API
+
+```ts
+import { analyze } from 'logilog'
+
+const report = await analyze({ input: 'server.log' })
+
+console.log(`Found ${report.summary.totalAnomalies} anomalies`)
+console.log(report.anomalies[0]?.context.narrative)
+```
+
+### Vitest reporter
+
+```ts
+// vitest.config.ts
+import { defineConfig } from 'vitest/config'
+
+export default defineConfig({
+  test: {
+    reporters: [
+      'default',
+      ['logilog/vitest', { logFiles: ['./logs/test-server.log'] }],
+    ],
+  },
+})
+```
+
+### Jest reporter
+
+```js
+// jest.config.js
+module.exports = {
+  reporters: [
+    'default',
+    ['logilog/jest', { logFiles: ['./logs/test-server.log'] }],
+  ],
+}
+```
+
+### CI caching (GitHub Actions)
+
+Cache the embedding model so it is not re-downloaded on every run:
+
+```yaml
+- name: Cache LogiLog model
+  uses: actions/cache@v4
+  with:
+    path: ~/.cache/logilog
+    key: logilog-model-v1-${{ runner.os }}
+    restore-keys: |
+      logilog-model-v1-
+```
+
+---
+
+### Try the web app
 
 Open the deployed app (GitHub Pages) — no install required.
 
