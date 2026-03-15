@@ -39,9 +39,7 @@ export class NodeEmbedder implements Embedder {
     try {
       transformers = await import('@huggingface/transformers')
     } catch {
-      throw new Error(
-        'onnxruntime-node is required for Node.js. Run: npm install onnxruntime-node',
-      )
+      throw new Error('onnxruntime-node is required for Node.js. Run: npm install onnxruntime-node')
     }
 
     const { pipeline, env } = transformers
@@ -70,20 +68,20 @@ export class NodeEmbedder implements Embedder {
     onProgress?.(0)
 
     // Load pipeline — Transformers.js handles download + caching to env.cacheDir
-    this.pipe = (await (pipeline as unknown as (
-      task: string,
-      model: string,
-      options: Record<string, unknown>,
-    ) => Promise<FeatureExtractionPipeline>)('feature-extraction', this.modelId, {
+    this.pipe = (await (
+      pipeline as unknown as (
+        task: string,
+        model: string,
+        options: Record<string, unknown>,
+      ) => Promise<FeatureExtractionPipeline>
+    )('feature-extraction', this.modelId, {
       dtype: this.dtype,
       device: 'cpu',
       progress_callback: (info: unknown) => {
         const p = info as Record<string, unknown>
         if (p['status'] === 'progress' && typeof p['progress'] === 'number') {
           // Print download progress to stderr, not stdout
-          process.stderr.write(
-            `\rDownloading model: ${(p['progress'] as number).toFixed(1)}%   `,
-          )
+          process.stderr.write(`\rDownloading model: ${(p['progress'] as number).toFixed(1)}%   `)
           onProgress?.(p['progress'] as number)
         }
       },

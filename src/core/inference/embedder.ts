@@ -4,6 +4,9 @@
  */
 export interface Embedder {
   initialize(onProgress?: (percent: number) => void): Promise<void>
-  embed(texts: string[], onProgress?: (done: number, total: number) => void): Promise<Float32Array[]>
+  embed(
+    texts: string[],
+    onProgress?: (done: number, total: number) => void,
+  ): Promise<Float32Array[]>
   dispose(): void
 }
