@@ -54,6 +54,8 @@
     "format": "prettier --write .",
     "typecheck": "tsc -b --noEmit",
     "test": "vitest run",
+    "test:node": "vitest run --config vitest.node.config.ts --reporter=verbose test/node-pipeline.test.ts",
+    "test:cli": "vitest run --config vitest.node.config.ts --reporter=verbose test/cli.e2e.test.ts",
     "test:e2e": "playwright test",
     "lighthouse": "lhci autorun",
     "build:analyze": "ANALYZE=true vite build",

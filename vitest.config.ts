@@ -10,7 +10,9 @@ export default defineConfig({
     globals: true,
     setupFiles: [],
     passWithNoTests: true,
-    exclude: ['**/node_modules/**', '**/dist/**', 'e2e/**'],
+    // Include src unit tests (jsdom) but exclude Node.js integration tests
+    include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
+    exclude: ['**/node_modules/**', '**/dist/**', 'e2e/**', 'test/**'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov'],
