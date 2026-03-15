@@ -29,10 +29,30 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          'vendor-react': ['react', 'react-dom'],
-          'vendor-ui': ['recharts', 'react-window'],
-          inference: ['@huggingface/transformers', 'onnxruntime-web'],
+        manualChunks(id) {
+          // Inference chunk — loaded lazily from workers only, excluded from initial budget
+          if (
+            id.includes('@huggingface/transformers') ||
+            id.includes('onnxruntime-web') ||
+            id.includes('onnxruntime')
+          ) {
+            return 'inference'
+          }
+          // React vendor chunk
+          if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/')) {
+            return 'vendor-react'
+          }
+          // UI vendor chunk — recharts, react-window, and their transitive deps (d3, etc.)
+          if (
+            id.includes('node_modules/recharts') ||
+            id.includes('node_modules/react-window') ||
+            id.includes('node_modules/d3-') ||
+            id.includes('node_modules/victory-') ||
+            id.includes('node_modules/internmap') ||
+            id.includes('node_modules/robust-predicates')
+          ) {
+            return 'vendor-ui'
+          }
         },
       },
     },
