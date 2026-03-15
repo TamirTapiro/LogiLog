@@ -1,11 +1,8 @@
 import { test, expect } from '@playwright/test'
 import path from 'path'
 import fs from 'fs'
-import { fileURLToPath } from 'url'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-const SAMPLE_LOG = path.join(__dirname, 'fixtures', 'sample.txt')
+const SAMPLE_LOG = path.join(process.cwd(), 'e2e', 'fixtures', 'sample.txt')
 
 // ---------------------------------------------------------------------------
 // Drag-and-drop file ingestion tests
@@ -56,13 +53,13 @@ test('dropping a log file ingests entries into the log viewer', async ({ page })
   // Build a DataTransfer with the fixture file inside the browser context
   const fileBuffer = fs.readFileSync(SAMPLE_LOG)
   const dataTransfer = await page.evaluateHandle(
-    ([buffer, name]: [number[], string]) => {
+    ({ buffer, name }: { buffer: number[]; name: string }) => {
       const dt = new DataTransfer()
       const file = new File([new Uint8Array(buffer)], name, { type: 'text/plain' })
       dt.items.add(file)
       return dt
     },
-    [Array.from(fileBuffer), 'sample.txt'],
+    { buffer: Array.from(fileBuffer), name: 'sample.txt' },
   )
 
   // Simulate the full drag sequence

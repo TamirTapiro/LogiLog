@@ -1,12 +1,8 @@
 import { test, expect } from '@playwright/test'
 import path from 'path'
-import { fileURLToPath } from 'url'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
 
 // Fixture path for a sample log file used by ingestion tests
-const SAMPLE_LOG = path.join(__dirname, 'fixtures', 'sample.txt')
+const SAMPLE_LOG = path.join(process.cwd(), 'e2e', 'fixtures', 'sample.txt')
 
 // ---------------------------------------------------------------------------
 // Flow 1: App loads and basic shell is visible
