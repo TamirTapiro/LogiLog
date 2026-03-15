@@ -1,6 +1,6 @@
 import * as Comlink from 'comlink'
 import { Decompress, unzipSync } from 'fflate'
-import { ParserRegistry } from './parsers/registry'
+import { ParserRegistry } from '../core/parsers/registry'
 import type { ParseWorkerOutput } from './worker.types'
 
 const BATCH_SIZE = 500
