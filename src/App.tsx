@@ -1,16 +1,27 @@
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { AppShell } from './components/layout/AppShell'
 import { ErrorBoundary } from './components/shared/ErrorBoundary'
 import { KeyboardShortcutsModal } from './components/shared/KeyboardShortcutsModal'
 import { FileDropZone } from './components/ingestion/FileDropZone'
-import { Timeline } from './components/timeline/Timeline'
-import { LogViewer } from './components/logs/LogViewer'
-import { ClusteringView } from './components/clustering/ClusteringView'
-import { AnomalyList } from './components/anomaly/AnomalyList'
-import { ForensicsView } from './components/forensics/ForensicsView'
 import { useKeyboardNavigation } from './hooks/useKeyboardNavigation'
 import { useAnalysisPipeline } from './hooks/useAnalysisPipeline'
 import useStore from './store'
+
+const Timeline = lazy(() =>
+  import('./components/timeline/Timeline').then((m) => ({ default: m.Timeline })),
+)
+const LogViewer = lazy(() =>
+  import('./components/logs/LogViewer').then((m) => ({ default: m.LogViewer })),
+)
+const ClusteringView = lazy(() =>
+  import('./components/clustering/ClusteringView').then((m) => ({ default: m.ClusteringView })),
+)
+const AnomalyList = lazy(() =>
+  import('./components/anomaly/AnomalyList').then((m) => ({ default: m.AnomalyList })),
+)
+const ForensicsView = lazy(() =>
+  import('./components/forensics/ForensicsView').then((m) => ({ default: m.ForensicsView })),
+)
 
 function PanelContent() {
   const activePanel = useStore((s) => s.ui.activePanel)
@@ -20,12 +31,15 @@ function PanelContent() {
     return <FileDropZone />
   }
 
-  if (activePanel === 'timeline') return <Timeline />
-  if (activePanel === 'logs') return <LogViewer />
-  if (activePanel === 'clusters') return <ClusteringView />
-  if (activePanel === 'anomalies') return <AnomalyList />
-  if (activePanel === 'forensics') return <ForensicsView />
-  return null
+  return (
+    <Suspense fallback={null}>
+      {activePanel === 'timeline' && <Timeline />}
+      {activePanel === 'logs' && <LogViewer />}
+      {activePanel === 'clusters' && <ClusteringView />}
+      {activePanel === 'anomalies' && <AnomalyList />}
+      {activePanel === 'forensics' && <ForensicsView />}
+    </Suspense>
+  )
 }
 
 function App() {

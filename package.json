@@ -12,7 +12,9 @@
     "typecheck": "tsc -b --noEmit",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "lighthouse": "lhci autorun"
+    "lighthouse": "lhci autorun",
+    "build:analyze": "ANALYZE=true vite build",
+    "check-bundle-size": "node scripts/check-bundle-size.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",
@@ -47,6 +49,7 @@
     "jsdom": "^28.1.0",
     "playwright": "^1.58.2",
     "prettier": "^3.8.1",
+    "rollup-plugin-visualizer": "^7.0.1",
     "tailwindcss": "^4.2.1",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.57.0",
