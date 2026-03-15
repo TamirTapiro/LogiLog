@@ -6,6 +6,10 @@ LogiLog runs entirely in your browser. Drop in a log file, and it uses on-device
 
 ![LogiLog UI](docs/screenshot-empty.png)
 
+After loading a log file, LogiLog runs the full analysis pipeline automatically:
+
+![After analysis — anomalies and clusters detected](docs/after-analysis.png)
+
 ---
 
 ## Why LogiLog?
@@ -38,6 +42,20 @@ When an anomaly is detected, LogiLog automatically extracts the surrounding cont
 
 Groups semantically similar log lines into collapsible clusters. Repetitive background noise (health checks, cache hits, metrics collection) is collapsed so you can focus on what changed.
 
+![Clusters tab](docs/clusters-tab.png)
+
+### Anomaly Detection
+
+Every log line is scored by its cosine distance from the cluster centroid. The top anomalies are ranked and listed with their score, source, and timestamp.
+
+![Anomalies tab](docs/anomalies-tab.png)
+
+### AI Forensics
+
+The AI Forensics tab combines everything into a single incident report. It shows the detected cluster patterns, the log context window around the top anomaly, and an AI-generated root cause analysis and suggested fix powered by Claude.
+
+![AI Forensics tab](docs/forensics-tab.png)
+
 ### Interactive Timeline
 
 Visualizes log volume over time with AI-detected anomaly spikes highlighted. Designed for incident response — the mental model of "when did this start?" is answered at a glance.
@@ -56,7 +74,7 @@ Full keyboard control for power users and SREs navigating logs under pressure.
 | `n` / `N` | Next / previous anomaly   |
 | `/`       | Focus search input        |
 | `Esc`     | Clear search              |
-| `1`–`4`   | Switch panels             |
+| `1`–`5`   | Switch panels             |
 | `?`       | Open this shortcuts modal |
 
 ### Export
@@ -77,9 +95,9 @@ Browser Tab
 └── IndexedDB          — caches parsed logs and model weights locally
 ```
 
-**Model:** `Xenova/all-MiniLM-L6-v2` (q8, ~23 MB), cached in IndexedDB after first load. Subsequent loads go from ~30 seconds to under 3 seconds.
+**Model:** `Xenova/bge-small-en-v1.5` (q8, ~23 MB), cached locally after first load. Subsequent loads go from ~30 seconds to under 3 seconds.
 
-**Privacy:** The app is a static HTML/JS bundle. No network requests are made with your log data. The model weights are fetched once from HuggingFace CDN and cached locally.
+**Privacy:** The app is a static HTML/JS bundle. Your log data never leaves the browser. The embedding model weights are fetched once from HuggingFace CDN and cached locally. The optional AI Forensics feature sends only the anomaly summary (log message, source, and context narrative — not the full log file) to the Claude API.
 
 ---
 
@@ -100,6 +118,16 @@ npm run dev
 ```
 
 Then open `http://localhost:5173/LogiLog/`.
+
+### Enable AI Forensics (optional)
+
+Create a `.env` file in the project root with your Anthropic API key:
+
+```bash
+VITE_ANTHROPIC_API_KEY=sk-ant-...
+```
+
+Get a key at [console.anthropic.com](https://console.anthropic.com). Without a key, the Forensics tab still works using built-in heuristic analysis.
 
 ### Load a log file
 
@@ -148,8 +176,9 @@ npm run lighthouse   # Lighthouse CI
 
 | Layer          | Choice                                       |
 | -------------- | -------------------------------------------- |
-| Framework      | React 19, TypeScript (strict)                |
-| ML Runtime     | Transformers.js v3, WebGPU backend           |
+| Framework      | React 18, TypeScript (strict)                |
+| ML Runtime     | Transformers.js v3, ONNX Runtime WASM        |
+| AI Forensics   | Anthropic Claude API (`claude-opus-4-6`)     |
 | State          | Zustand                                      |
 | Virtualization | react-window (handles millions of log lines) |
 | Charts         | Recharts                                     |
