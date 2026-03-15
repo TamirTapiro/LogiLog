@@ -1,5 +1,9 @@
 import { test, expect } from '@playwright/test'
 import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 // Fixture path for a sample log file used by ingestion tests
 const SAMPLE_LOG = path.join(__dirname, 'fixtures', 'sample.txt')
@@ -38,6 +42,8 @@ test('sidebar collapse button is present and accessible', async ({ page }) => {
 test('keyboard shortcuts modal opens with ? key', async ({ page }) => {
   await page.goto('/')
 
+  // Click to ensure the page has focus before sending keyboard events
+  await page.locator('body').click()
   await page.keyboard.press('?')
   await expect(page.getByRole('dialog', { name: /keyboard shortcuts/i })).toBeVisible()
 
