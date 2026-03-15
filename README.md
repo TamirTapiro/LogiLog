@@ -1,6 +1,13 @@
 # LogiLog
 
-**Browser-native semantic forensic log analysis — zero backend, zero cost, zero privacy risk.**
+[![CI](https://github.com/TamirTapiro/Logilog/actions/workflows/ci.yml/badge.svg)](https://github.com/TamirTapiro/Logilog/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/logilog)](https://www.npmjs.com/package/logilog)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Deploy](https://github.com/TamirTapiro/Logilog/actions/workflows/deploy.yml/badge.svg)](https://github.com/TamirTapiro/Logilog/actions/workflows/deploy.yml)
+
+> **Browser-native semantic forensic log analysis — zero backend, zero cost, zero privacy risk.**
+
+[**Live Demo**](https://tamirtapiro.github.io/Logilog/) · [Report a Bug](https://github.com/TamirTapiro/Logilog/issues/new?template=bug.yml) · [Request a Feature](https://github.com/TamirTapiro/Logilog/issues/new?template=feature.yml)
 
 LogiLog runs entirely in your browser. Drop in a log file, and it uses on-device ML (WebGPU-accelerated transformer embeddings) to detect semantic anomalies, cluster repetitive noise, and surface root-cause context — all without sending a single byte to a server.
 
@@ -253,6 +260,21 @@ LogiLog is a static app — `npm run build` produces a `dist/` folder that can b
 npm run build
 # dist/ is ready to serve
 ```
+
+---
+
+## Contributing
+
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, code standards, commit conventions, and the pull request process.
+
+```bash
+git clone https://github.com/TamirTapiro/Logilog.git
+cd Logilog
+npm install
+npm run dev
+```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
 ---
 

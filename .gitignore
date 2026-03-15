@@ -46,3 +46,13 @@ example.txt
 .env
 .env.local
 .env.*.local
+
+# Lighthouse CI
+.lighthouseci/
+
+# npm pack output
+*.tgz
+
+# macOS extended attributes
+.AppleDouble
+.LSOverride

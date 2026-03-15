@@ -3,6 +3,29 @@
   "version": "0.0.1",
   "type": "module",
   "description": "Semantic log forensics: detect anomalies, cluster events, and generate AI-powered narratives from any log file.",
+  "keywords": [
+    "log-analysis",
+    "anomaly-detection",
+    "ml",
+    "webgpu",
+    "transformers",
+    "embeddings",
+    "forensics",
+    "observability",
+    "clustering",
+    "vitest-reporter",
+    "jest-reporter",
+    "cli",
+    "browser"
+  ],
+  "homepage": "https://tamirtapiro.github.io/Logilog/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TamirTapiro/Logilog.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TamirTapiro/Logilog/issues"
+  },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
