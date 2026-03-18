@@ -24,17 +24,17 @@ jobs:
         language: [javascript-typescript]
 
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@60168efe1c415ce0f5b4e6d4cf5ebb17f5c72ea5 # v3.28.15
+        uses: github/codeql-action/init@0c0c5dc2f136b98cb0537075ccfa21f94cd9a63e # codeql-bundle-v2.24.3
         with:
           languages: ${{ matrix.language }}
 
       - name: Autobuild
-        uses: github/codeql-action/autobuild@60168efe1c415ce0f5b4e6d4cf5ebb17f5c72ea5 # v3.28.15
+        uses: github/codeql-action/autobuild@0c0c5dc2f136b98cb0537075ccfa21f94cd9a63e # codeql-bundle-v2.24.3
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@60168efe1c415ce0f5b4e6d4cf5ebb17f5c72ea5 # v3.28.15
+        uses: github/codeql-action/analyze@0c0c5dc2f136b98cb0537075ccfa21f94cd9a63e # codeql-bundle-v2.24.3
         with:
           category: /language:${{ matrix.language }}

@@ -8,7 +8,8 @@ export function Timeline() {
   const { buckets, containerRef } = useTimeline()
   const { scrollToIndex } = useVirtualLog()
 
-  function handleBarClick(data: { activePayload?: Array<{ payload: { firstIndex: number } }> }) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function handleBarClick(data: any) {
     const idx = data?.activePayload?.[0]?.payload?.firstIndex
     if (idx !== undefined && idx >= 0) {
       scrollToIndex(idx)
